@@ -1,0 +1,21 @@
+package org.example.spring_ecommerce.adapters.outBound.repositories.usuarioGrupo;
+
+import lombok.AllArgsConstructor;
+import org.example.spring_ecommerce.domain.usuario.Usuario;
+import org.example.spring_ecommerce.domain.usuarioGrupo.UsuarioGrupoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@AllArgsConstructor
+@Repository
+public class UsuarioGrupoDAO implements UsuarioGrupoRepository {
+
+    private final UsuarioGrupoRepositoryJPA repository;
+
+    @Override
+    public List<String> findPermissoesByUsuario(Usuario usuario) {
+        return repository.findPermissoesByUsuario(usuario);
+    }
+
+}
