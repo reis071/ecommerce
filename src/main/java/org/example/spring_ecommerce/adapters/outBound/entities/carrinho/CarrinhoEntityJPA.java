@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.entities.itemCarrinho.ItemCarrinhoEntityJPA;
+import org.example.spring_ecommerce.domain.usuario.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

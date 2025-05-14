@@ -2,8 +2,8 @@ package org.example.spring_ecommerce.domain.usuario;
 
 import org.example.spring_ecommerce.domain.carrinho.Carrinho;
 import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
-
 import java.util.*;
+
 public class Usuario {
     private Long id;
     private String nome;
@@ -17,17 +17,15 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(Long id, String nome, double saldo, String senha, String email) {
+    public Usuario(Long id, String nome,  String senha, String email) {
         this.id = id;
         this.nome = nome;
-        this.saldo = saldo;
         this.senha = senha;
         this.email = email;
     }
 
-    public Usuario(  String nome, double saldo, String senha, String email) {
+    public Usuario(String nome,  String senha, String email) {
         this.nome = nome;
-        this.saldo = saldo;
         this.senha = senha;
         this.email = email;
     }

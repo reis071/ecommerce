@@ -1,6 +1,7 @@
 package org.example.spring_ecommerce.application.services.email;
 
 
+import lombok.AllArgsConstructor;
 import org.example.spring_ecommerce.adapters.inBound.controllers.dto.EmailDto;
 
 import org.springframework.mail.SimpleMailMessage;
@@ -8,14 +9,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+
+@AllArgsConstructor
 @Service
 public class EmailService {
 
     private final JavaMailSender mailSender;
-
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
 
     public void sendEmail(EmailDto emailDto) {
         SimpleMailMessage message = new SimpleMailMessage();

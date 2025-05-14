@@ -3,8 +3,8 @@ package org.example.spring_ecommerce.application.services.usuario;
 import lombok.AllArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.grupo.GrupoEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.repositories.usuarioGrupo.UsuarioGrupoRepositoryJPA;
-import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioDAO;
+import org.example.spring_ecommerce.adapters.outBound.repositories.usuarioGrupo.UsuarioGrupoImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
 import org.example.spring_ecommerce.application.services.email.EmailService;
 import org.example.spring_ecommerce.application.useCases.grupo.GrupoUseCases;
 import org.example.spring_ecommerce.application.useCases.usuario.UsuarioUseCases;
@@ -31,11 +31,9 @@ import java.util.stream.Collectors;
 @Service
 public class UsuarioService implements  UsuarioUseCases,UserDetailsService {
 
-
-    private final UsuarioDAO usuarioDAO;
-
+    private final UsuarioImpl usuarioImpl;
     private final GrupoUseCases grupoUseCases;
-    private final UsuarioGrupoRepositoryJPA usuarioGrupoRepositoryJPA;
+    private final UsuarioGrupoImpl usuarioGrupoImpl;
 
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
@@ -48,17 +46,18 @@ public class UsuarioService implements  UsuarioUseCases,UserDetailsService {
         usuario.setSenha(senhaCriptografada);
 
         List<UsuarioGrupoEntityJPA> listaUsuarioGrupoEntityJPA = grupos.stream().map(nomeGrupo -> {
-                    Grupo grupo = grupoUseCases.procurarGruPorNomeService(nomeGrupo);
-                        usuarioDAO.save(usuario);
 
-                        UsuarioEntityJPA usuarioEntityJPA = new UsuarioEntityJPA(usuario);
-                        GrupoEntityJPA grupoEntityJPA = new GrupoEntityJPA(grupo);
+                    Grupo grupo = grupoUseCases.procurarGruPorNomeService(nomeGrupo);
+                        usuarioImpl.salvar(usuario);
+
+                        UsuarioEntityJPA usuarioEntityJPA = new UsuarioEntityJPA(usuario.getNome(), usuario.getSenha(), usuario.getEmail());
+                        GrupoEntityJPA grupoEntityJPA = new GrupoEntityJPA(grupo.getNome());
 
                         return new UsuarioGrupoEntityJPA(usuarioEntityJPA, grupoEntityJPA);
                 })
                 .collect(Collectors.toList());
 
-        usuarioGrupoRepositoryJPA.saveAll(listaUsuarioGrupoEntityJPA);
+        usuarioImpl.salvar(listaUsuarioGrupoEntityJPA);
 
         return usuario;
     }
@@ -75,23 +74,22 @@ public class UsuarioService implements  UsuarioUseCases,UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioDAO.findByEmail(email);
-        List<String> permissoes = usuarioGrupoRepositoryJPA.findPermissoesByUsuario(usuario);
-        return new UsuarioDto(usuario, permissoes); // Retorna um UsuarioDto com permissões
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
+
+        return new UsuarioDto(usuario, usuario.getPermissoes()); // Retorna um UsuarioDto com permissões
     }
 
     //Ver a permissão do usuario
     public UsuarioDto obterUsuarioComPermissoes(String email) {
-        Usuario usuario = usuarioDAO.findByEmail(email);
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
 
-        List<String> permissoes = usuarioGrupoRepositoryJPA.findPermissoesByUsuario(usuario);
-        return new UsuarioDto(usuario, permissoes); // Retorna um UsuarioDto com permissões
+        return new UsuarioDto(usuario, usuario.getPermissoes()); // Retorna um UsuarioDto com permissões
     }
     //valida
 
     //envia token para alterar senha
     public void enviarSolicitacaoDeResetarSenha(String email) {
-        Usuario user = usuarioDAO.findByEmail(email);
+        Usuario user = usuarioImpl.procurarUsuarioPorEmail(email);
 
         String token = jwtService.gerarToken    (new UsuarioDto(user,user.getPermissoes()));
 
@@ -113,22 +111,22 @@ public class UsuarioService implements  UsuarioUseCases,UserDetailsService {
 
         String email = jwtService.obterLoginUsuario(token);
 
-        Usuario user = usuarioDAO.findByEmail(email);
+        Usuario user = usuarioImpl.procurarUsuarioPorEmail(email);
 
         user.setSenha(passwordEncoder.encode(newPassword));
 
-        usuarioDAO.save(user);
+        usuarioImpl.salvar(user);
     }
 
     public void depositar(double deposito){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        Usuario usuario = usuarioDAO.findByEmail(email);
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
 
         if (deposito > 0) {
             usuario.setSaldo(usuario.getSaldo() + deposito);
-            usuarioDAO.save(usuario);
+            usuarioImpl.salvar(usuario);
         } else {
             throw new RuntimeException("Saldo não pode ser negativo");
         }

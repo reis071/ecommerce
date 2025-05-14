@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.example.spring_ecommerce.adapters.outBound.entities.itemVenda.ItemVendaEntityJPA;
+import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
 import org.example.spring_ecommerce.domain.enums.StatusVenda;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 
@@ -22,7 +23,7 @@ public class VendaEntityJPA {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario;
+    private UsuarioEntityJPA usuario;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     @Column(nullable = false)
@@ -40,11 +41,58 @@ public class VendaEntityJPA {
 
     public VendaEntityJPA() { }
 
-    public VendaEntityJPA(Usuario usuario, LocalDateTime dataVenda, double valorTotal) {
-        this.usuario = usuario;
+    public VendaEntityJPA(UsuarioEntityJPA usuarioEntityJPA, LocalDateTime dataVenda, double valorTotal) {
+        this.usuario = usuarioEntityJPA;
         this.dataVenda = dataVenda;
         this.valorTotal = valorTotal;
         this.status = null;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UsuarioEntityJPA getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioEntityJPA usuario) {
+        this.usuario = usuario;
+    }
+
+    public LocalDateTime getDataVenda() {
+        return dataVenda;
+    }
+
+    public void setDataVenda(LocalDateTime dataVenda) {
+        this.dataVenda = dataVenda;
+    }
+
+    public StatusVenda getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusVenda status) {
+        this.status = status;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public List<ItemVendaEntityJPA> getItensVenda() {
+        return itensVenda;
+    }
+
+    public void setItensVenda(List<ItemVendaEntityJPA> itensVenda) {
+        this.itensVenda = itensVenda;
+    }
 }

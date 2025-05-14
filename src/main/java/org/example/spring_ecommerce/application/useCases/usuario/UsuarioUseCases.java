@@ -9,7 +9,6 @@ import java.util.List;
 public interface UsuarioUseCases {
     public Usuario salvar(Usuario usuario, List<String> grupos);
 
-    public UsuarioDto obterUsuarioComPermissoes(String email);
 
     public void enviarSolicitacaoDeResetarSenha(String email);
 

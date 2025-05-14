@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.example.spring_ecommerce.adapters.outBound.entities.itemVenda.ItemVendaEntityJPA;
 import org.example.spring_ecommerce.domain.enums.StatusVenda;
+import org.example.spring_ecommerce.domain.itemVenda.ItemVenda;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class Venda {
 
     private double valorTotal;
 
-    private List<ItemVendaEntityJPA> itensVenda = new ArrayList<>();
+    private List<ItemVenda> itensVenda = new ArrayList<>();
 
     public Venda() { }
 
@@ -63,14 +64,6 @@ public class Venda {
         this.dataVenda = dataVenda;
     }
 
-    public double getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
-    }
-
     public StatusVenda getStatus() {
         return status;
     }
@@ -79,11 +72,19 @@ public class Venda {
         this.status = status;
     }
 
-    public List<ItemVendaEntityJPA> getItensVenda() {
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public List<ItemVenda> getItensVenda() {
         return itensVenda;
     }
 
-    public void setItensVenda(List<ItemVendaEntityJPA> itensVenda) {
+    public void setItensVenda(List<ItemVenda> itensVenda) {
         this.itensVenda = itensVenda;
     }
 

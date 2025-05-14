@@ -5,14 +5,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.itemCarrinho.ItemCarrinhoEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.entities.itemVenda.ItemVendaEntityJPA;
+import org.example.spring_ecommerce.domain.produto.Produto;
 
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@NoArgsConstructor
 @Data
 @Entity
 public class ProdutoEntityJPA {
@@ -62,7 +66,6 @@ public class ProdutoEntityJPA {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     @Column(nullable = false)
     private LocalDateTime atualizadoEm;
-    public ProdutoEntityJPA() {}
 
     public ProdutoEntityJPA(String nome, String descricao, String categoria, double preco, int estoque) {
         this.nome = nome;
@@ -72,4 +75,16 @@ public class ProdutoEntityJPA {
         this.descricao = descricao;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProdutoEntityJPA that = (ProdutoEntityJPA) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

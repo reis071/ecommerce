@@ -123,7 +123,7 @@ public class VendaService {
                     LocalDate vendaDate = venda.getDataVenda().toLocalDate();
                     return !vendaDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !vendaDate.getDayOfWeek().equals(DayOfWeek.SUNDAY);
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         int totalVendas = vendaRel.size();
         double rendaTotal = 0.0;

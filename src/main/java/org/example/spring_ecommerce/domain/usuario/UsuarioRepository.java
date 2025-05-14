@@ -5,13 +5,13 @@ import java.util.Optional;
 
 public interface UsuarioRepository {
 
-    Usuario save(Usuario usuario);
+    Usuario salvar(Usuario usuario);
 
-    Usuario findByEmail(String email);
+    Usuario procurarUsuarioPorEmail(String email);
 
-    Usuario findById(Long id);
+    Usuario procurarUsuarioPorId(Long id);
 
-    List<Usuario> findAll();
+    List<Usuario> todosOsUsuarios();
 
     void deleteById(Long id);
 }

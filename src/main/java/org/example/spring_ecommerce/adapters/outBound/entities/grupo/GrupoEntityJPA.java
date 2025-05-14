@@ -19,9 +19,8 @@ public class GrupoEntityJPA {
     @Column(nullable = false, unique = true)
     private String nome;
 
-    public GrupoEntityJPA(Grupo grupo) {
-        this.id = grupo.getId();
-        this.nome = grupo.getNome();
+    public GrupoEntityJPA( String nome) {
+        this.nome = nome;
     }
 
     @Override

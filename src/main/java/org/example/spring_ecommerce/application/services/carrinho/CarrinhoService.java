@@ -1,18 +1,19 @@
 package org.example.spring_ecommerce.application.services.carrinho;
 
 import lombok.RequiredArgsConstructor;
-import org.example.spring_ecommerce.adapters.outBound.entities.carrinho.CarrinhoEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.entities.itemCarrinho.ItemCarrinhoEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.entities.itemVenda.ItemVendaEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.repositories.carrinho.CarrinhoDAO;
-import org.example.spring_ecommerce.adapters.outBound.repositories.itemCarrinho.ItemCarrinhoRepositoryJPA;
-import org.example.spring_ecommerce.adapters.outBound.repositories.itemVenda.ItemVendaRepositoryJPA;
-import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoRepositoryJPA;
-import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioDAO;
-import org.example.spring_ecommerce.adapters.outBound.repositories.venda.VendaRepositoryJPA;
+import org.example.spring_ecommerce.adapters.outBound.repositories.carrinho.CarrinhoImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.itemCarrinho.ItemCarrinhoImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.itemVenda.ItemVendaImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.venda.VendaImpl;
+import org.example.spring_ecommerce.application.useCases.carrinho.CarrinhoUseCases;
 import org.example.spring_ecommerce.domain.carrinho.Carrinho;
+import org.example.spring_ecommerce.domain.itemCarrinho.ItemCarrinho;
+import org.example.spring_ecommerce.domain.itemVenda.ItemVenda;
+import org.example.spring_ecommerce.domain.produto.Produto;
+import org.example.spring_ecommerce.domain.venda.Venda;
 import org.example.spring_ecommerce.infrastructure.configuration.advices.exceptionExclusives.ProdutoInativo;
 import org.example.spring_ecommerce.domain.enums.StatusVenda;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
@@ -22,29 +23,24 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class CarrinhoService {
+public class CarrinhoService implements CarrinhoUseCases {
 
-    private final ProdutoRepositoryJPA produtoRepositoryJPA;
-    private final VendaRepositoryJPA vendaRepositoryJPA;
-    private final ItemVendaRepositoryJPA itemVendaRepository;
-    private final UsuarioDAO usuarioDAO;
-    private final CarrinhoDAO carrinhoDAO;
-    private final ItemCarrinhoRepositoryJPA itemCarrinhoRepository;
+    private final ProdutoImpl produtoImpl;
+    private final VendaImpl vendaImpl;
+    private final ItemVendaImpl itemVendaImpl;
+    private final UsuarioImpl usuarioImpl;
+    private final CarrinhoImpl carrinhoImpl;
+    private final ItemCarrinhoImpl itemCarrinhoImpl;
 
-
-
-    public VendaEntityJPA compra(String nomeProd, int quantidade){
+    public Venda compra(String nomeProd, int quantidade){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        Usuario usuario = usuarioDAO.findByEmail(email);
-
-        ProdutoEntityJPA produtoAtual = produtoRepositoryJPA.findByNome(nomeProd)
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
+        Produto produtoAtual = produtoImpl.procurarProdutoPorNome(nomeProd);
 
         if (!produtoAtual.isAtivo()){
             throw new ProdutoInativo();
@@ -54,41 +50,42 @@ public class CarrinhoService {
             throw new IllegalArgumentException("Quantidade inválida, estoque insuficiente");
         }
 
-
-        VendaEntityJPA venda = new VendaEntityJPA(usuario, LocalDateTime.now(), quantidade * produtoAtual.getPreco());
-        venda.setStatus(StatusVenda.VENDIDO);
+        Venda venda = new Venda(usuario, LocalDateTime.now(), quantidade * produtoAtual.getPreco());
 
         if(usuario.getSaldo() >= (quantidade * produtoAtual.getPreco())){
             usuario.setSaldo(usuario.getSaldo() - quantidade * produtoAtual.getPreco());
-            usuarioDAO.save(usuario);
-            vendaRepositoryJPA.save(venda);
+
+            venda.setStatus(StatusVenda.VENDIDO);
+
+            produtoAtual.setEstoque(produtoAtual.getEstoque() - quantidade);
+
+            ItemVenda itemVenda = new ItemVenda(produtoAtual, venda, quantidade);
+            venda.getItensVenda().add(itemVenda);
+
+            produtoImpl.salvar(produtoAtual);
+            usuarioImpl.salvar(usuario);
+            vendaImpl.salva(venda);
+            itemVendaImpl.salvar(itemVenda);
+
+            return venda;
         }
+
         else {
             venda.setStatus(StatusVenda.CANCELADA);
-            vendaRepositoryJPA.save(venda);
+            vendaImpl.salva(venda);
             throw new IllegalArgumentException("Saldo insuficiente");
         }
 
-        produtoAtual.setEstoque(produtoAtual.getEstoque() - quantidade);
-        produtoRepositoryJPA.save(produtoAtual);
-
-        ItemVendaEntityJPA itemVendaEntityJPA = new ItemVendaEntityJPA(produtoAtual, venda, quantidade);
-        venda.getItensVenda().add(itemVendaEntityJPA);
-
-        itemVendaRepository.save(itemVendaEntityJPA);
-
-        return venda;
     }
 
     // Método para adicionar um item ao carrinho
-    public CarrinhoEntityJPA adicionarAoCarrinho(String nomeProd, int quantidade) {
+    public Carrinho adicionarAoCarrinho(String nomeProd, int quantidade) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        Usuario usuario = usuarioDAO.findByEmail(email);
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
 
-        ProdutoEntityJPA produtoAtual = produtoRepositoryJPA.findByNome(nomeProd)
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+        Produto produtoAtual = produtoImpl.procurarProdutoPorNome(nomeProd);
 
         if (!produtoAtual.isAtivo()) {
             throw new ProdutoInativo();
@@ -98,27 +95,22 @@ public class CarrinhoService {
             throw new IllegalArgumentException("Quantidade inválida, estoque insuficiente");
         }
 
-        Carrinho  carrinho = carrinhoDAO.procurarUsuario(usuario);
-        carrinhoDAO.salvar(usuario);
+        Carrinho carrinho = carrinhoImpl.salvar(usuario);
 
-        // Adiciona o item ao carrinho
-        ItemCarrinhoEntityJPA itemCarrinho = new ItemCarrinhoEntityJPA(carrinho, produtoAtual, quantidade);
-        itemCarrinhoRepository.save(itemCarrinho);
-        carrinho.getItens().add(itemCarrinho);
+        itemCarrinhoImpl.salvar(carrinho, produtoAtual, quantidade);
 
         return carrinho;
     }
 
     // Método para comprar os itens do carrinho
-    public VendaEntityJPA finalizarCompra() {
+    public Venda finalizarCompra() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        Usuario usuario = usuarioDAO.findByEmail(email);
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
 
-        Carrinho carrinho = carrinhoDAO.procurarUsuario(usuario);
+        List<ItemCarrinho> itensCarrinho = itemCarrinhoImpl.TodosOsItens(usuario);
 
-        List<ItemCarrinhoEntityJPA> itensCarrinho = carrinho.getItens();
         if (itensCarrinho.isEmpty()) {
             throw new IllegalArgumentException("O carrinho está vazio.");
         }
@@ -132,13 +124,14 @@ public class CarrinhoService {
         }
 
         // Cria a venda
-        VendaEntityJPA venda = new VendaEntityJPA(usuario, LocalDateTime.now(), valorTotal);
+        Venda venda = new Venda(usuario, LocalDateTime.now(), valorTotal);
         venda.setStatus(StatusVenda.VENDIDO);
-        vendaRepositoryJPA.save(venda);
+        vendaImpl.salva(venda);
 
         // Processa cada item do carrinho
-        for (ItemCarrinhoEntityJPA itemCarrinho : itensCarrinho) {
-            ProdutoEntityJPA produto = itemCarrinho.getProduto();
+        for (ItemCarrinho itemCarrinho : itensCarrinho) {
+            Produto produto = itemCarrinho.getProduto();
+
             int quantidade = itemCarrinho.getQuantidade();
 
             if (quantidade > produto.getEstoque()) {
@@ -146,20 +139,20 @@ public class CarrinhoService {
             }
 
             produto.setEstoque(produto.getEstoque() - quantidade);
-            produtoRepositoryJPA.save(produto);
+            produtoImpl.salvar(produto);
 
-            ItemVendaEntityJPA itemVendaEntityJPA = new ItemVendaEntityJPA(produto, venda, quantidade);
-            itemVendaRepository.save(itemVendaEntityJPA);
-            venda.getItensVenda().add(itemVendaEntityJPA);
+            ItemVenda itemVenda = new ItemVenda(produto, venda, quantidade);
+            itemVendaImpl.salvar(itemVenda);
+            venda.getItensVenda().add(itemVenda);
         }
 
         // Deduz o saldo do usuário e atualiza
         usuario.setSaldo(usuario.getSaldo() - valorTotal);
-        usuarioDAO.save(usuario);
+        usuarioImpl.salvar(usuario);
 
         // Limpa o carrinho após a compra
-        carrinho.getItens().clear();
-        carrinhoDAO.salvar(carrinho.getUsuario());
+        usuario.getCarrinho().getItens().clear();
+        carrinhoImpl.salvar(usuario.getCarrinho().getUsuario());
 
         return venda;
     }
@@ -169,31 +162,30 @@ public class CarrinhoService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        Usuario usuario = usuarioDAO.findByEmail(email);
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
 
-        Carrinho carrinho = carrinhoDAO.procurarUsuario(usuario);
+        Carrinho carrinho = new Carrinho(usuario);
 
-        ProdutoEntityJPA produto = produtoRepositoryJPA.findByNome(nomeProduto)
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado com o nome: " + nomeProduto));
+        Produto produto = produtoImpl.procurarProdutoPorNome(nomeProduto);
 
-        Optional<ItemCarrinhoEntityJPA> itemCarrinho = itemCarrinhoRepository.findByCarrinhoAndProduto(carrinho, produto);
+        ItemCarrinho itemCarrinho = itemCarrinhoImpl.procurarCarrinhoEProduto(carrinho, produto);
 
-        if (itemCarrinho.isPresent()) {
-            itemCarrinhoRepository.delete(itemCarrinho.get());
+        if (itemCarrinho != null) {
+            itemCarrinhoImpl.removerItemCarrinho(itemCarrinho);
         } else {
             throw new IllegalArgumentException("Produto não encontrado no carrinho");
         }
     }
 
-    public String precoTotalCarrinho(){
+    public String  precoTotalCarrinho(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        Usuario usuario = usuarioDAO.findByEmail(email);
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
 
-        Carrinho carrinho = carrinhoDAO.procurarUsuario(usuario);
-
+        Carrinho carrinho = new Carrinho(usuario);
         List<ItemCarrinhoEntityJPA> itensCarrinho = carrinho.getItens();
+
         if (itensCarrinho.isEmpty()) {
             throw new IllegalArgumentException("O carrinho está vazio.");
         }

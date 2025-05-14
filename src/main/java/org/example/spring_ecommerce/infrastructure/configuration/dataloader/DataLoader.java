@@ -2,7 +2,7 @@ package org.example.spring_ecommerce.infrastructure.configuration.dataloader;
 
 
 import lombok.AllArgsConstructor;
-import org.example.spring_ecommerce.adapters.outBound.repositories.grupo.GrupoDAO;
+import org.example.spring_ecommerce.adapters.outBound.repositories.grupo.GrupoImpl;
 import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
 import org.example.spring_ecommerce.domain.grupo.Grupo;
 import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoRepositoryJPA;
@@ -19,14 +19,14 @@ public class DataLoader {
 
     private ProdutoRepositoryJPA produtoRepository;
     @Bean
-    public ApplicationRunner initUsuario(GrupoDAO grupoDAO, ProdutoService produtoService ) {
+    public ApplicationRunner initUsuario(GrupoImpl grupoImpl, ProdutoService produtoService ) {
         Random random = new Random();
 
         return args -> {
-            if(grupoDAO.findAll().isEmpty()) {
+            if(grupoImpl.findAll().isEmpty()) {
 
-            grupoDAO.salvar(new Grupo("ADMIN"));
-            grupoDAO.salvar(new Grupo("USER"));
+            grupoImpl.salvar(new Grupo("ADMIN"));
+            grupoImpl.salvar(new Grupo("USER"));
             }
             if(produtoRepository.findAll().isEmpty()) {
                 produtoService.save(new ProdutoEntityJPA("Notebook Dell", "Notebook de alta performance", "Eletrônicos", 4500.0, random.nextInt(100)));

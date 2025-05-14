@@ -14,7 +14,6 @@ public class ItemVendaEntityJPA {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "id_Produto", nullable = false)
     private ProdutoEntityJPA produto;
@@ -30,9 +29,9 @@ public class ItemVendaEntityJPA {
 
     public ItemVendaEntityJPA() {}
 
-    public ItemVendaEntityJPA(ProdutoEntityJPA produto, VendaEntityJPA venda, Integer quantidade) {
-        this.produto = produto;
-        this.venda = venda;
+    public ItemVendaEntityJPA(ProdutoEntityJPA produtoEntityJPA, VendaEntityJPA vendaEntityJPA, Integer quantidade) {
+        this.produto = produtoEntityJPA;
+        this.venda = vendaEntityJPA;
         this.quantidade = quantidade;
     }
 

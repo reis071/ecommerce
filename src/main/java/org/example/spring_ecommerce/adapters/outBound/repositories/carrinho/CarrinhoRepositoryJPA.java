@@ -9,5 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface CarrinhoRepositoryJPA extends JpaRepository<CarrinhoEntityJPA, Long> {
-    Optional<CarrinhoEntityJPA> findByUsuario(UsuarioEntityJPA usuario);
 }

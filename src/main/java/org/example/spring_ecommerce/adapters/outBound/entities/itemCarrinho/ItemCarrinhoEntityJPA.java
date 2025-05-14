@@ -32,9 +32,9 @@ public class ItemCarrinhoEntityJPA {
 
     public ItemCarrinhoEntityJPA() {}
 
-    public ItemCarrinhoEntityJPA(Carrinho carrinho, ProdutoEntityJPA produto, int quantidade) {
-        this.carrinho = carrinho;
-        this.produto = produto;
+        public ItemCarrinhoEntityJPA(CarrinhoEntityJPA carrinhoEntityJPA, ProdutoEntityJPA produtoEntityJPA, int quantidade) {
+        this.carrinho = carrinhoEntityJPA;
+        this.produto = produtoEntityJPA;
         this.quantidade = quantidade;
     }
 

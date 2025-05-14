@@ -38,6 +38,14 @@ public class Produto {
     private LocalDateTime atualizadoEm;
     public Produto() {}
 
+    public Produto(Long id,String nome, String descricao, String categoria, double preco, int estoque) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
+        this.estoque = estoque;
+        this.descricao = descricao;
+    }
     public Produto(String nome, String descricao, String categoria, double preco, int estoque) {
         this.nome = nome;
         this.preco = preco;

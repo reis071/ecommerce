@@ -1,5 +1,6 @@
 package org.example.spring_ecommerce.adapters.outBound.repositories.usuarioGrupo;
 
+import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.example.spring_ecommerce.adapters.outBound.entities.usuarioGrupo.UsuarioGrupoEntityJPA;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +18,5 @@ public interface UsuarioGrupoRepositoryJPA extends JpaRepository<UsuarioGrupoEnt
             join ug.usuario u
             where u = ?1
     """)
-    List<String> findPermissoesByUsuario(Usuario usuario);
+    List<String> findPermissoesByUsuario(UsuarioEntityJPA usuarioEntityJPA);
 }

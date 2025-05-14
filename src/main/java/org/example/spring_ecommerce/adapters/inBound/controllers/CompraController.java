@@ -5,6 +5,7 @@ import org.example.spring_ecommerce.domain.carrinho.Carrinho;
 import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
 
 import org.example.spring_ecommerce.application.services.carrinho.CarrinhoService;
+import org.example.spring_ecommerce.domain.venda.Venda;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +18,8 @@ public class CompraController {
     private final CarrinhoService compraService;
 
     @PostMapping("comprar-direto")
-    public ResponseEntity<VendaEntityJPA> comprarProduto(@RequestParam String nomeProd, @RequestParam int quantidade) {
-        VendaEntityJPA venda = compraService.compra(nomeProd, quantidade);
+    public ResponseEntity<Venda> comprarProduto(@RequestParam String nomeProd, @RequestParam int quantidade) {
+        Venda venda = compraService.compra(nomeProd, quantidade);
         return ResponseEntity.ok(venda);
     }
 
@@ -33,7 +34,7 @@ public class CompraController {
     // Endpoint para finalizar a compra de todos os itens do carrinho
     @PostMapping("finalizar-compra")
     public ResponseEntity<String> finalizarCompra() {
-        VendaEntityJPA venda = compraService.finalizarCompra();
+        compraService.finalizarCompra();
         return ResponseEntity.status(HttpStatus.OK).body("compra feita com sucesso!");
     }
 

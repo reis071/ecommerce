@@ -7,5 +7,4 @@ import java.util.Optional;
 public interface CarrinhoRepository {
     Carrinho salvar(Usuario usuario);
 
-    Carrinho procurarUsuario(Usuario usuario);
 }
