@@ -7,12 +7,11 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.carrinho.CarrinhoEntityJPA;
+import org.example.spring_ecommerce.adapters.outBound.entities.grupo.GrupoEntityJPA;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -41,19 +40,19 @@ public class UsuarioEntityJPA {
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private CarrinhoEntityJPA carrinhoEntityJPA;
+    private CarrinhoEntityJPA carrinho;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore // Prevent serialization issues
     private List<VendaEntityJPA> vendas = new ArrayList<>();
 
-    @Transient
-    private List<String> permissoes;
+    @ManyToMany(mappedBy = "usuarios")
+    private Set<GrupoEntityJPA> grupo = new HashSet<>();
 
-    public UsuarioEntityJPA(Usuario usuario) {
-        this.nome = usuario.getNome();
-        this.senha = usuario.getSenha();
-        this.email = usuario.getEmail();
+    public UsuarioEntityJPA(String nome, String senha, String email) {
+        this.nome = nome;
+        this.senha = senha;
+        this.email = email;
     }
 
     @Override

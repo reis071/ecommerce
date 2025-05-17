@@ -7,12 +7,11 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.carrinho.CarrinhoEntityJPA;
+import org.example.spring_ecommerce.adapters.outBound.entities.grupo.GrupoEntityJPA;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -41,14 +40,19 @@ public class UsuarioEntityJPA {
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private CarrinhoEntityJPA carrinhoEntityJPA;
+    private CarrinhoEntityJPA carrinho;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore // Prevent serialization issues
     private List<VendaEntityJPA> vendas = new ArrayList<>();
 
-    @Transient
-    private List<String> permissoes;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "grupo_usuario",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "grupo_id")
+    )
+    private Set<GrupoEntityJPA> grupo = new HashSet<>();
 
     public UsuarioEntityJPA(String nome, String senha, String email) {
         this.nome = nome;

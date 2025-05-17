@@ -11,5 +11,4 @@ import java.util.List;
 public interface VendaRepositoryJPA extends JpaRepository<VendaEntityJPA, Long> {
     List<VendaEntityJPA> findByDataVendaBetween(LocalDateTime start, LocalDateTime end);
 
-    List<VendaEntityJPA> findByUsuarioEmail(String email);
 }

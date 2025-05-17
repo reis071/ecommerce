@@ -1,10 +1,10 @@
-package org.example.spring_ecommerce.adapters.inBound.controllers;
+package org.example.spring_ecommerce.adapters.inBound.controllers.usuario;
 
 import lombok.RequiredArgsConstructor;
 
 import org.example.spring_ecommerce.infrastructure.configuration.advices.exceptionExclusives.UsuarioNaoPodeCriarAdmin;
 
-import org.example.spring_ecommerce.adapters.inBound.controllers.dto.UsuarioDto;
+import org.example.spring_ecommerce.adapters.inBound.dtos.UsuarioDto;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.example.spring_ecommerce.infrastructure.configuration.security.jwt.JwtService;
 import org.example.spring_ecommerce.application.services.usuario.UsuarioService;

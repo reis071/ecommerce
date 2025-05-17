@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.example.spring_ecommerce.adapters.inBound.controllers.dto.UsuarioDto;
+import org.example.spring_ecommerce.adapters.inBound.dtos.UsuarioDto;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

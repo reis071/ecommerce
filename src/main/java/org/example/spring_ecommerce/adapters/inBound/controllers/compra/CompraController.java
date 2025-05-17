@@ -1,8 +1,7 @@
-package org.example.spring_ecommerce.adapters.inBound.controllers;
+package org.example.spring_ecommerce.adapters.inBound.controllers.compra;
 
 import lombok.RequiredArgsConstructor;
 import org.example.spring_ecommerce.domain.carrinho.Carrinho;
-import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
 
 import org.example.spring_ecommerce.application.services.carrinho.CarrinhoService;
 import org.example.spring_ecommerce.domain.venda.Venda;

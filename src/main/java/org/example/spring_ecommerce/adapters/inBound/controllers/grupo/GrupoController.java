@@ -1,4 +1,4 @@
-package org.example.spring_ecommerce.adapters.inBound.controllers;
+package org.example.spring_ecommerce.adapters.inBound.controllers.grupo;
 
 import org.example.spring_ecommerce.domain.grupo.Grupo;
 import org.example.spring_ecommerce.application.services.grupo.GrupoService;

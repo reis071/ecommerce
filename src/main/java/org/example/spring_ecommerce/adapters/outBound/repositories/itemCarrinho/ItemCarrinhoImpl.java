@@ -23,9 +23,9 @@ public class ItemCarrinhoImpl implements ItemCarrinhoRepository {
     private final ItemCarrinhoRepositoryJPA itemCarrinhoRepository;
     private final ItemCarrinhoMapperJPA mapper;
 
-    UsuarioMapperJPA usuarioMapper;
-    ProdutoMapperJPA produtoMapperJPA;
-    CarrinhoMapperJPA carrinhoMapperJPA;
+    private final UsuarioMapperJPA usuarioMapper;
+    private final ProdutoMapperJPA produtoMapperJPA;
+    private final CarrinhoMapperJPA carrinhoMapperJPA;
 
 
     @Override

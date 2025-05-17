@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.spring_ecommerce.adapters.inBound.controllers.dto.UsuarioDto;
+import org.example.spring_ecommerce.adapters.inBound.dtos.UsuarioDto;
 import org.example.spring_ecommerce.application.services.usuario.UsuarioService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

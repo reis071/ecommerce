@@ -1,13 +1,21 @@
 package org.example.spring_ecommerce.application.services.vendas;
 
 import lombok.RequiredArgsConstructor;
+import org.example.spring_ecommerce.adapters.outBound.repositories.itemVenda.ItemVendaImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
 import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioRepositoryJPA;
 import org.example.spring_ecommerce.adapters.outBound.entities.itemVenda.ItemVendaEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.repositories.itemVenda.ItemVendaRepositoryJPA;
 import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoRepositoryJPA;
+import org.example.spring_ecommerce.adapters.outBound.repositories.venda.VendaImpl;
 import org.example.spring_ecommerce.adapters.outBound.repositories.venda.VendaRepositoryJPA;
+import org.example.spring_ecommerce.application.useCases.venda.VendaUseCases;
+import org.example.spring_ecommerce.domain.itemVenda.ItemVenda;
+import org.example.spring_ecommerce.domain.produto.Produto;
+import org.example.spring_ecommerce.domain.venda.Venda;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,72 +29,62 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class VendaService {
+public class VendaService implements VendaUseCases {
 
-    private final ProdutoRepositoryJPA produtoRepository;
-    private final UsuarioRepositoryJPA usuarioRepository;
-    private final ItemVendaRepositoryJPA itemVendaRepository;
-    private final VendaRepositoryJPA vendaRepositoryJPA;
-
+    private final ProdutoImpl produtoImpl;
+    private final VendaImpl vendaImpl;
+    private final ItemVendaImpl itemVendaImpl;
 
 
     //retorna todas as vendas
     @Cacheable("vendaCache")
-    public List<VendaEntityJPA> findAll() {
-        return  vendaRepositoryJPA.findAll();
+    public List<Venda> todasAsVendas() {
+        return  vendaImpl.todasAsVendas();
     }
 
-    //retorna uma venda por id
-    public List<VendaEntityJPA> buscarVendasPorEmail(String email) {
-        return vendaRepositoryJPA.findByUsuarioEmail(email);
-    }
 
     //atualiza uma venda
     @CacheEvict(value = "vendaCache", allEntries = true)
-    public VendaEntityJPA update(Long id, String produtoNome, Integer quantidade, Long usuarioId) {
-        VendaEntityJPA venda = vendaRepositoryJPA.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Venda não encontrada"));
+    public Venda atualizarVenda(Long id, String produtoNome, Integer quantidade, Long usuarioId) {
+        Venda venda = vendaImpl.buscaPorId(id);
 
-        ProdutoEntityJPA produtoAtual = produtoRepository.findByNome(produtoNome)
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+        Produto produto = produtoImpl.procurarProdutoPorNome(produtoNome);
 
-        if (quantidade == null || quantidade <= 0 || quantidade > produtoAtual.getEstoque()) {
+        if (quantidade == null || quantidade <= 0 || quantidade > produto.getEstoque()) {
             throw new IllegalArgumentException("Quantidade inválida ou estoque insuficiente");
         }
 
-        usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-
         venda.setDataVenda(LocalDateTime.now());
-        venda.setValorTotal(quantidade * produtoAtual.getPreco());
+        venda.setValorTotal(quantidade * produto.getPreco());
 
 
-        ItemVendaEntityJPA itemVendaEntityJPA = venda.getItensVenda().stream()
-                .filter(item -> item.getProduto().equals(produtoAtual))
+        ItemVenda itemVendaEntityJPA = venda.getItensVenda().stream()
+                .filter(item -> item.getProduto().equals(produto))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado na venda"));
 
         itemVendaEntityJPA.setQuantidade(quantidade);
 
-        produtoAtual.setEstoque(produtoAtual.getEstoque() - quantidade);
+        produto.setEstoque(produto.getEstoque() - quantidade);
 
-        produtoRepository.save(produtoAtual);
-        itemVendaRepository.save(itemVendaEntityJPA);
+        produtoImpl.salvar(produto);
+        itemVendaImpl.salvar(itemVendaEntityJPA);
 
-        return vendaRepositoryJPA.save(venda);
+        return vendaImpl.salva(venda);
     }
 
     //relatorio vendas por data
     @Cacheable("vendaCache")
     public String vendasPorDia(LocalDate date) {
-        LocalDateTime startOfDay = date.atStartOfDay();
-        LocalDateTime endOfDay = startOfDay.plusDays(1).minusNanos(1);
-        List<VendaEntityJPA> vendaRel = vendaRepositoryJPA.findByDataVendaBetween(startOfDay, endOfDay);
+        LocalDateTime dataDeInicio = date.atStartOfDay();
+        LocalDateTime dataFinal = dataDeInicio.plusDays(1).minusNanos(1);
+
+        List<Venda> vendaRel = vendaImpl.buscaPorDataVendaBetween(dataDeInicio, dataFinal);
 
         int totalVendas = vendaRel.size();
         double rendaTotal = 0.0;
 
-        for (VendaEntityJPA venda : vendaRel) {
+        for (Venda venda : vendaRel) {
             rendaTotal += venda.getValorTotal();
         }
         return  "{total vendas: " + totalVendas  +", renda total: " + rendaTotal + "}";
@@ -98,11 +96,11 @@ public class VendaService {
 
         LocalDateTime startOfMonth = LocalDate.of(year, month, 1).atStartOfDay();
         LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusNanos(1);
-        List<VendaEntityJPA> vendaRel =  vendaRepositoryJPA.findByDataVendaBetween(startOfMonth, endOfMonth);
+        List<Venda> vendaRel =  vendaImpl.buscaPorDataVendaBetween(startOfMonth, endOfMonth);
         int totalVendas = vendaRel.size();
         double rendaTotal = 0.0;
 
-        for (VendaEntityJPA venda : vendaRel) {
+        for (Venda venda : vendaRel) {
             rendaTotal += venda.getValorTotal();
         }
         return  "{total vendas: " + totalVendas  +", renda total: " + rendaTotal + "}";
@@ -118,7 +116,7 @@ public class VendaService {
         LocalDateTime startOfWeekDateTime = startOfWeek.atStartOfDay();
         LocalDateTime endOfWeekDateTime = endOfWeek.atTime(LocalTime.MAX);
 
-        List<VendaEntityJPA> vendaRel = vendaRepositoryJPA.findByDataVendaBetween(startOfWeekDateTime, endOfWeekDateTime).stream()
+        List<Venda> vendaRel = vendaImpl.buscaPorDataVendaBetween(startOfWeekDateTime, endOfWeekDateTime).stream()
                 .filter(venda -> {
                     LocalDate vendaDate = venda.getDataVenda().toLocalDate();
                     return !vendaDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !vendaDate.getDayOfWeek().equals(DayOfWeek.SUNDAY);
@@ -128,7 +126,7 @@ public class VendaService {
         int totalVendas = vendaRel.size();
         double rendaTotal = 0.0;
 
-        for (VendaEntityJPA venda : vendaRel) {
+        for (Venda venda : vendaRel) {
             rendaTotal += venda.getValorTotal();
         }
 
@@ -137,7 +135,7 @@ public class VendaService {
 
     //deletar venda
     @CacheEvict(value = "vendaCache", allEntries = true)
-    public void delete(Long id) {
-        vendaRepositoryJPA.deleteById(id);
+    public void deletarVenda(Long id) {
+        vendaImpl.delete(id);
     }
 }

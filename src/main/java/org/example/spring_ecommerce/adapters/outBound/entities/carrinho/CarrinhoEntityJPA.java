@@ -22,7 +22,7 @@ public class CarrinhoEntityJPA {
 
     @OneToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private UsuarioEntityJPA usuarioEntityJPA;
+    private UsuarioEntityJPA usuario;
 
     @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -30,7 +30,7 @@ public class CarrinhoEntityJPA {
 
 
     public CarrinhoEntityJPA(UsuarioEntityJPA usuarioEntityJPA) {
-        this.usuarioEntityJPA = usuarioEntityJPA;
+        this.usuario = usuarioEntityJPA;
     }
 
     @Override

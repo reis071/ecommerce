@@ -1,4 +1,4 @@
-package org.example.spring_ecommerce.adapters.inBound.controllers.dto;
+package org.example.spring_ecommerce.adapters.inBound.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

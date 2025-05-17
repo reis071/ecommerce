@@ -1,0 +1,10 @@
+package org.example.spring_ecommerce.adapters.outBound.entities.usuario;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class AutenticacaoService {
+    
+}

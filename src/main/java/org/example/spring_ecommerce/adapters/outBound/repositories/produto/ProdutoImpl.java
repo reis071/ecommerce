@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public class ProdutoImpl implements ProdutoRepository {
 
     private final ProdutoRepositoryJPA repository;
-    ProdutoMapperJPA mapper;
+    private final ProdutoMapperJPA mapper;
 
     @Override
     public Produto salvar(Produto produto) {

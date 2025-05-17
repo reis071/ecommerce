@@ -1,4 +1,4 @@
-package org.example.spring_ecommerce.adapters.inBound.controllers;
+package org.example.spring_ecommerce.adapters.inBound.controllers.produto;
 
 import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
 import org.example.spring_ecommerce.application.services.produto.ProdutoService;

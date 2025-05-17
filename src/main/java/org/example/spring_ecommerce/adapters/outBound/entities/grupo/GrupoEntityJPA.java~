@@ -1,6 +1,5 @@
 package org.example.spring_ecommerce.adapters.outBound.entities.grupo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +23,12 @@ public class GrupoEntityJPA {
     @Column(nullable = false, unique = true)
     private String nome;
 
-    @ManyToMany(mappedBy = "grupo", fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "grupo_usuario",
+            joinColumns = @JoinColumn( name = "grupo_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
     private Set<UsuarioEntityJPA> usuarios = new HashSet<>();
 
     public GrupoEntityJPA( String nome) {

@@ -25,28 +25,24 @@ public class UsuarioImpl implements UsuarioRepository {
         return mapper.toDomain(usuarioEntityJPA);
     }
 
-    @Transactional
     @Override
     public Usuario procurarUsuarioPorEmail(String email) {
         UsuarioEntityJPA usuarioEntityJPA = repository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuário nao encontrado"));
         return mapper.toDomain(usuarioEntityJPA);
     }
 
-    @Transactional
     @Override
     public Usuario procurarUsuarioPorId(Long id) {
         UsuarioEntityJPA usuarioEntityJPA = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário nao encontrado"));
         return mapper.toDomain(usuarioEntityJPA);
     }
 
-    @Transactional
     @Override
     public List<Usuario> todosOsUsuarios() {
         List<UsuarioEntityJPA> entities = repository.findAll();
         return  mapper.toDomainList(entities);
     }
 
-    @Transactional
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);

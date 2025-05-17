@@ -1,9 +1,8 @@
-package org.example.spring_ecommerce.adapters.inBound.controllers;
+package org.example.spring_ecommerce.adapters.inBound.controllers.venda;
 
 
-import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
-
-import org.example.spring_ecommerce.application.services.VendaService;
+import org.example.spring_ecommerce.application.services.vendas.VendaService;
+import org.example.spring_ecommerce.domain.venda.Venda;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -25,22 +24,17 @@ public class VendaController {
 
 
     @GetMapping
-    public ResponseEntity<List<VendaEntityJPA>> pegarTodasVendas(Authentication authentication) {
-        List<VendaEntityJPA> vendas = vendaService.findAll();
+    public ResponseEntity<List<Venda>> pegarTodasVendas(Authentication authentication) {
+        List<Venda> vendas = vendaService.todasAsVendas();
         return ResponseEntity.status(HttpStatus.OK).body(vendas);
     }
 
-    @GetMapping("/buscarVenda")
-    public ResponseEntity<List<VendaEntityJPA>> buscarVendasPorEmail(@RequestParam String email) {
-        List<VendaEntityJPA> vendas = vendaService.buscarVendasPorEmail(email);
-        return ResponseEntity.ok(vendas);
-    }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteVenda(@PathVariable Long id) {
         try {
-            vendaService.delete(id);
+            vendaService.deletarVenda(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
@@ -48,13 +42,14 @@ public class VendaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VendaEntityJPA> updateVenda(@PathVariable Long id,
+    public ResponseEntity<Venda> updateVenda(@PathVariable Long id,
                                                       @RequestParam String produtoNome,
                                                       @RequestParam Integer quantidade,
                                                       @RequestParam Long usuarioId) {
         try {
-            VendaEntityJPA vendaAtualizada = vendaService.update(id, produtoNome, quantidade, usuarioId);
+            Venda vendaAtualizada = vendaService.atualizarVenda(id, produtoNome, quantidade, usuarioId);
             return ResponseEntity.ok(vendaAtualizada);
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

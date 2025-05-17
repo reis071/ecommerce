@@ -72,7 +72,7 @@ public class UsuarioService implements  UsuarioUseCases,UserDetailsService {
         }
         throw new ErroAutenticacao();
     }
-
+    
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);

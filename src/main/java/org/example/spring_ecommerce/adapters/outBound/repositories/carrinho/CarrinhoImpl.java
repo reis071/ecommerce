@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public class CarrinhoImpl implements CarrinhoRepository {
 
     private final CarrinhoRepositoryJPA repository;
-    CarrinhoMapperJPA mapper;
+    private final CarrinhoMapperJPA mapper;
 
     @Override
     public Carrinho salvar(Usuario usuario) {

@@ -1,6 +1,6 @@
 package org.example.spring_ecommerce.infrastructure.configuration.security;
 
-import org.example.spring_ecommerce.adapters.inBound.controllers.dto.UsuarioDto;
+import org.example.spring_ecommerce.adapters.inBound.dtos.UsuarioDto;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

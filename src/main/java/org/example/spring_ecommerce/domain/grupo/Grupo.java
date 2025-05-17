@@ -1,13 +1,19 @@
 package org.example.spring_ecommerce.domain.grupo;
 
 
+import org.example.spring_ecommerce.domain.usuario.Usuario;
+
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Grupo {
 
     private Long id;
 
     private String nome;
+
+    private Set<Usuario> usuarios = new HashSet<>();
 
     public Grupo() {}
 
@@ -29,6 +35,15 @@ public class Grupo {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+
+    public Set<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(Set<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 
     @Override

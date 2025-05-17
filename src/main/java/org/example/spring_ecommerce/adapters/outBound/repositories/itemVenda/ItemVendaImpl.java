@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public class ItemVendaImpl implements ItemVendaRepository {
     private final ItemVendaRepositoryJPA itemVendaRepositoryJPA;
     private final ProdutoRepositoryJPA produtoRepositoryJPA;
-    ItemVendaMapperJPA mapper;
+    private final ItemVendaMapperJPA mapper;
 
     @Override
     public ItemVenda salvar(ItemVenda itemVenda) {
