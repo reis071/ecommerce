@@ -6,7 +6,7 @@
     <!-- Definição do cache para Produto -->
     <cache alias="produtoCache">
         <key-type>java.lang.Long</key-type>
-        <value-type>org.example.spring_ecommerce.model.Produto</value-type>
+        <value-type>org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA</value-type>
 
         <!-- Expiração do cache após 3 minutos -->
         <expiry>
@@ -26,7 +26,7 @@
     <!-- Definição do cache para Venda -->
     <cache alias="vendaCache">
         <key-type>java.lang.Long</key-type>
-        <value-type>org.example.spring_ecommerce.model.Venda</value-type>
+        <value-type>org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA</value-type>
 
         <!-- Expiração do cache após 3 minutos -->
         <expiry>

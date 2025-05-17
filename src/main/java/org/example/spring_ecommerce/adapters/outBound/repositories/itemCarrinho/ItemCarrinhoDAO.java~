@@ -1,0 +1,69 @@
+package org.example.spring_ecommerce.adapters.outBound.repositories.itemCarrinho;
+
+import lombok.AllArgsConstructor;
+import org.example.spring_ecommerce.adapters.outBound.entities.carrinho.CarrinhoEntityJPA;
+import org.example.spring_ecommerce.adapters.outBound.entities.itemCarrinho.ItemCarrinhoEntityJPA;
+import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
+import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
+import org.example.spring_ecommerce.adapters.outBound.mappers.itemCarrinho.ItemCarrinhoMapperJPA;
+import org.example.spring_ecommerce.adapters.outBound.mappers.usuario.UsuarioMapperJPA;
+import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoRepositoryJPA;
+import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioRepositoryJPA;
+import org.example.spring_ecommerce.domain.carrinho.Carrinho;
+import org.example.spring_ecommerce.domain.itemCarrinho.ItemCarrinho;
+import org.example.spring_ecommerce.domain.itemCarrinho.ItemCarrinhoRepository;
+import org.example.spring_ecommerce.domain.produto.Produto;
+import org.example.spring_ecommerce.domain.usuario.Usuario;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+
+@AllArgsConstructor
+@Repository
+public class ItemCarrinhoDAO implements ItemCarrinhoRepository {
+    private final ItemCarrinhoRepositoryJPA itemCarrinhoRepository;
+    private final ItemCarrinhoMapperJPA mapper;
+    private final UsuarioMapperJPA usuarioMapper;
+
+    @Override
+    public ItemCarrinho salvar(Carrinho carrinho, Produto produto, int quantidade) {
+
+        ItemCarrinho itemCarrinho = new ItemCarrinho(carrinho, produto, quantidade);
+
+        ItemCarrinhoEntityJPA itemCarrinhoEntityJPA = itemCarrinhoRepository.save(mapper.toEntity(itemCarrinho));
+
+        return mapper.toDomain(itemCarrinhoEntityJPA);
+    }
+
+    @Override
+    public List<ItemCarrinho> TodosOsItens(Usuario usuario) {
+
+        CarrinhoEntityJPA carrinhoEntityJPA = new CarrinhoEntityJPA(usuarioMapper.toEntity(usuario));
+
+        List<ItemCarrinhoEntityJPA> itemCarrinhoEntityJPA = carrinhoEntityJPA.getItens();
+        return mapper.toDomainList(itemCarrinhoEntityJPA);
+    }
+
+    @Override
+    public ItemCarrinho procurarCarrinhoEProduto(Carrinho carrinho, Produto produto) {
+        CarrinhoEntityJPA carrinhoEntityJPA = usuarioRepository.
+                findByEmail(carrinho.getUsuario().getEmail()).orElseThrow(() -> new RuntimeException("Usuário nao encontrado")).
+                getCarrinhoEntityJPA();
+
+        ProdutoEntityJPA produtoEntityJPA = produtoRepository.
+                findByNome(produto.getNome()).orElseThrow(() -> new RuntimeException("Produto nao encontrado"));
+
+        ItemCarrinhoEntityJPA itemCarrinhoEntityJPA = itemCarrinhoRepository.
+                findByCarrinhoAndProduto(carrinhoEntityJPA,produtoEntityJPA).orElseThrow(() -> new RuntimeException("Item nao encontrado"));
+
+        return mapper.toDomain(itemCarrinhoEntityJPA);
+
+    }
+
+    @Override
+    public void removerItemCarrinho(ItemCarrinho itemCarrinho) {
+
+        itemCarrinhoRepository.delete(mapper.toEntity(itemCarrinho));
+    }
+}

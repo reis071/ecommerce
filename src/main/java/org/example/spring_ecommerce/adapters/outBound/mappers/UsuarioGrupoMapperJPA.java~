@@ -1,0 +1,4 @@
+package org.example.spring_ecommerce.adapters.outBound.mappers;
+
+public interface UsuarioGrupoMapperJPA {
+}
