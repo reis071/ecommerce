@@ -15,7 +15,7 @@ import java.util.List;
 public class GrupoImpl implements GrupoRepository {
 
     private final GrupoRepositoryJPA repository;
-    GrupoMapperJPA mapper;
+    private final GrupoMapperJPA mapper;
 
     @Override
     public Grupo salvar(Grupo grupo) {

@@ -20,7 +20,8 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(String nome,  String senha, String email) {
+    public Usuario(String nome,  String email, String senha) {
+
         this.nome = nome;
         this.senha = senha;
         this.email = email;
@@ -82,12 +83,12 @@ public class Usuario {
         this.vendas = vendas;
     }
 
-    public Set<Grupo> getPermissoes() {
+    public Set<Grupo> getGrupo() {
         return grupo;
     }
 
-    public void setPermissoes(Set<Grupo> permissoes) {
-        this.grupo = permissoes;
+    public void setGrupo(Set<Grupo> grupo) {
+        this.grupo = grupo;
     }
 
     @Override

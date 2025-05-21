@@ -21,7 +21,7 @@ public class GrupoController {
     private final GrupoUseCases grupoUseCases;
 
     @PostMapping(path = "/add")
-
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Grupo> cadastrarGrupo(@RequestBody Grupo grupo){
         return ResponseEntity.status(HttpStatus.CREATED).body(grupoUseCases.salvarGrupo(grupo));
     }
@@ -33,6 +33,7 @@ public class GrupoController {
     }
 
     @PostMapping(path = "/add-grupo-ao-usuario")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Grupo> addGrupoAoUsuario(@RequestParam String emailUsuario, @RequestParam String tipoGrupo){
         grupoUseCases.addGrupoAoUsuario(tipoGrupo, emailUsuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(grupoUseCases.procurarGrupoPorNome(tipoGrupo));

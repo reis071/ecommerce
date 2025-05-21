@@ -2,6 +2,8 @@ package org.example.spring_ecommerce.domain.usuario;
 
 import org.example.spring_ecommerce.domain.carrinho.Carrinho;
 import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
+import org.example.spring_ecommerce.domain.grupo.Grupo;
+
 import java.util.*;
 
 public class Usuario {
@@ -14,11 +16,12 @@ public class Usuario {
 
     private Carrinho carrinho;
     private List<VendaEntityJPA> vendas = new ArrayList<>();
-    private List<String> permissoes = new ArrayList<>();
+    private Set<Grupo> grupo = new HashSet<>();
 
     public Usuario() {}
 
-    public Usuario(String nome,  String senha, String email) {
+    public Usuario(String nome,  String email, String senha) {
+        
         this.nome = nome;
         this.senha = senha;
         this.email = email;
@@ -80,12 +83,12 @@ public class Usuario {
         this.vendas = vendas;
     }
 
-    public List<String> getPermissoes() {
-        return permissoes;
+    public Set<Grupo> getGrupo() {
+        return grupo;
     }
 
-    public void setPermissoes(List<String> permissoes) {
-        this.permissoes = permissoes;
+    public void setGrupo(Set<Grupo> grupo) {
+        this.grupo = grupo;
     }
 
     @Override

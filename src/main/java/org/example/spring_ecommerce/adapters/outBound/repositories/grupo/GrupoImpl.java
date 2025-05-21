@@ -1,5 +1,6 @@
 package org.example.spring_ecommerce.adapters.outBound.repositories.grupo;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.grupo.GrupoEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.mappers.grupo.GrupoMapperJPA;
@@ -17,6 +18,7 @@ public class GrupoImpl implements GrupoRepository {
     private final GrupoRepositoryJPA repository;
     private final GrupoMapperJPA mapper;
 
+    @Transactional
     @Override
     public Grupo salvar(Grupo grupo) {
         GrupoEntityJPA grupoEntityJPA = new GrupoEntityJPA(grupo.getNome());

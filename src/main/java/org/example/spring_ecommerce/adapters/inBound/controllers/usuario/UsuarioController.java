@@ -15,54 +15,31 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/usuarios")
-@RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    private final JwtService jwtService;
 
-    @PostMapping(path = "/user")
-    public ResponseEntity<Usuario> salvarUsuario(@RequestBody UsuarioDto body) {
-        if (body.getPermissoes().contains("ADMIN")) {
-            throw new UsuarioNaoPodeCriarAdmin();
-        }
-        Usuario usuario = usuarioService.salvar(body.getUsuario(), body.getPermissoes());
-
+    @PostMapping(path = "/cadastrar-usuario")
+    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario) {
+        usuarioService.salvar(usuario);
         return ResponseEntity.ok(usuario);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(path = "/adm")
-    public ResponseEntity<Usuario> salvarAdm(@RequestBody UsuarioDto body){
-        Usuario usuarioSalvo = usuarioService.salvar(body.getUsuario(), body.getPermissoes());
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
-    }
-
-    @PostMapping("/autenticar")
-            public ResponseEntity<String> autenticar(@RequestParam String email, @RequestParam String senha){
-            Usuario usuario = new Usuario();
-            usuario.setEmail(email);
-            usuario.setSenha(senha);
-
-            usuarioService.autenticar(usuario);
-            String token = jwtService.gerarToken(new UsuarioDto(usuario,usuario.getPermissoes()));
-            return  ResponseEntity.status(HttpStatus.OK).body("Token gerado com sucesso:" + token);
- }
-
-    @PostMapping("/resetar-senha-request")
-    public ResponseEntity<String> requestPasswordReset(@RequestParam String email) {
-        usuarioService.enviarSolicitacaoDeResetarSenha(email);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Link de reset de senha enviado para o email.");
-    }
-
-    @PostMapping("/resetar-senha")
-    public ResponseEntity<String> resetPassword(@RequestParam String token,
-                                                @RequestParam String novaSenha) {
-        usuarioService.resetarSenha(token, novaSenha);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Senha alterada com sucesso.");
-    }
+//    @PostMapping("/solicitar-nova-senha")
+//    public ResponseEntity<String> requestPasswordReset(@RequestParam String email) {
+//        usuarioService.enviarSolicitacaoDeResetarSenha(email);
+//        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Link de reset de senha enviado para o email.");
+//    }
+//
+//    @PostMapping("/resetar-senha")
+//    public ResponseEntity<String> resetarSenhaUsuario(@RequestParam String token,
+//                                                @RequestParam String novaSenha) {
+//        usuarioService.resetarSenha(token, novaSenha);
+//        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Senha alterada com sucesso.");
+//    }
 
     @PutMapping("depositar")
     public ResponseEntity<String> depositar(@RequestParam double valor) {

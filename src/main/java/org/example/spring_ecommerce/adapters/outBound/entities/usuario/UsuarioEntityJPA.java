@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.spring_ecommerce.adapters.outBound.entities.carrinho.CarrinhoEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.entities.grupo.GrupoEntityJPA;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
@@ -13,8 +15,9 @@ import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntity
 
 import java.util.*;
 
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 public class UsuarioEntityJPA {
 
@@ -54,10 +57,12 @@ public class UsuarioEntityJPA {
     )
     private Set<GrupoEntityJPA> grupo = new HashSet<>();
 
-    public UsuarioEntityJPA(String nome, String senha, String email) {
-        this.nome = nome;
-        this.senha = senha;
-        this.email = email;
+
+    public UsuarioEntityJPA(Usuario usuario) {
+        this.id = usuario.getId();
+        this.nome = usuario.getNome();
+        this.senha = usuario.getSenha();
+        this.email = usuario.getEmail();
     }
 
     @Override

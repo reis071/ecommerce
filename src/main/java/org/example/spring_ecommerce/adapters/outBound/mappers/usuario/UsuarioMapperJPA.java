@@ -3,6 +3,7 @@ package org.example.spring_ecommerce.adapters.outBound.mappers.usuario;
 import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UsuarioMapperJPA {
 
+    @Mapping(target = "id", source = "id")
     Usuario toDomain(UsuarioEntityJPA entity);
 
     UsuarioEntityJPA toEntity(Usuario domain);

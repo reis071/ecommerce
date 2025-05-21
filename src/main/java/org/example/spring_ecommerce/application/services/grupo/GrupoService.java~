@@ -18,25 +18,21 @@ public class GrupoService implements GrupoUseCases {
     private UsuarioUseCases usuarioUseCases;
 
     @Override
-    public Grupo salvarGrupo(Grupo grupo) {
+    public Grupo salvarGrupoService(Grupo grupo) {
         return grupoImpl.salvar(grupo);
     }
 
     @Override
-    public List<Grupo> todosGrupos() {
+    public List<Grupo> todosGruposService() {
         return grupoImpl.findAll();
     }
 
     @Override
-    public Grupo procurarGrupoPorNome(String nome) {
+    public Grupo procurarGruPorNomeService(String nome) {
         return grupoImpl.findByNome(nome);
     }
 
-    public void addGrupoAoUsuario(String tipoGrupo, String emailUsuario) {
-        Usuario usuario = usuarioUseCases.buscarUsuarioPorEmail(emailUsuario);
-        Grupo grupo = procurarGrupoPorNome(tipoGrupo);
+    public void addGrupoAoUsuario(String nome, Usuario usuario) {
 
-        usuario.getGrupo().add(grupo);
-        usuarioUseCases.salvar(usuario);
     }
 }

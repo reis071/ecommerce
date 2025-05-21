@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,30 +26,25 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   ValidationPass validationPass,
-                                                   JwtAuthFilter jwtAuthFilter,
-                                                   CustomAuthenticationProvider customAuthenticationProvider,
-                                                   UsuarioService usuarioService) throws Exception {
-        return  http.
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.
         csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(customizer -> {
-                    customizer.requestMatchers("/usuarios/resetar-senha-request").permitAll();
-                    customizer.requestMatchers("/usuarios/resetar-senha").permitAll();
-                    customizer.requestMatchers("/usuarios/autenticar").permitAll();
-                    customizer.requestMatchers("/usuarios/user").permitAll();
-                    customizer.anyRequest().authenticated();
-                })
-                .httpBasic(Customizer.withDefaults())
-                .authenticationProvider(validationPass)
-                .authenticationProvider(customAuthenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .securityContext(contextFilter -> contextFilter.requireExplicitSave(false))
+                .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/usuarios/resetar-senha-request", "/usuarios/autenticar", "/usuarios/cadastrar-usuario").permitAll()
+                        .anyRequest().authenticated());
+        http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomExceptionBasicAuth()));
+
+        http.exceptionHandling(ex -> ex.accessDeniedHandler(new CustomAcessDeniedHandler()));
+
+        return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 
