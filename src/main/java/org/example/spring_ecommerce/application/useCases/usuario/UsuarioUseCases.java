@@ -5,10 +5,8 @@ import org.example.spring_ecommerce.domain.usuario.Usuario;
 import java.util.List;
 
 public interface UsuarioUseCases {
-    public Usuario salvar(Usuario usuario);
 
-    public Usuario buscarUsuarioPorEmail(String email);
+    Usuario salvar(Usuario usuario);
 
-
-    public void depositar(double deposito);
+    Usuario buscarUsuarioPorEmail(String email);
 }

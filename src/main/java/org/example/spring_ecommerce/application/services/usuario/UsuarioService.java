@@ -4,17 +4,11 @@ import lombok.AllArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
 import org.example.spring_ecommerce.application.services.email.EmailService;
 import org.example.spring_ecommerce.application.useCases.usuario.UsuarioUseCases;
-import org.example.spring_ecommerce.infrastructure.configuration.advices.exceptionExclusives.ErroAutenticacao;
-import org.example.spring_ecommerce.infrastructure.configuration.advices.exceptionExclusives.TokenInvalido;
-import org.example.spring_ecommerce.adapters.inBound.dtos.EmailDto;
-import org.example.spring_ecommerce.adapters.inBound.dtos.UsuarioDto;
 
 import org.example.spring_ecommerce.domain.usuario.Usuario;
-import org.example.spring_ecommerce.infrastructure.configuration.security.jwt.JwtService;
+import org.example.spring_ecommerce.infrastructure.configuration.security.jwt.JwtValidatorFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +20,7 @@ public class UsuarioService implements  UsuarioUseCases {
     private final UsuarioImpl usuarioImpl;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final JwtService jwtService;
+    private final JwtValidatorFilter jwtValidatorFilter;
 
 
     //Cadastra Usuario
@@ -74,20 +68,6 @@ public class UsuarioService implements  UsuarioUseCases {
 //
 //        usuarioImpl.salvar(user);
 //    }
-
-    public void depositar(double deposito){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
-
-        if (deposito > 0) {
-            usuario.setSaldo(usuario.getSaldo() + deposito);
-            usuarioImpl.salvar(usuario);
-        } else {
-            throw new RuntimeException("Saldo não pode ser negativo");
-        }
-    }
 
 }
 

@@ -23,7 +23,6 @@ public class UsuarioImpl implements UsuarioRepository {
     public Usuario salvar(Usuario usuario) {
         UsuarioEntityJPA usuarioEntityJPA = new UsuarioEntityJPA(usuario);
         repository.save(usuarioEntityJPA);
-
         usuario.setId(usuarioEntityJPA.getId());
         return mapper.toDomain(usuarioEntityJPA);
     }
@@ -32,14 +31,9 @@ public class UsuarioImpl implements UsuarioRepository {
     @Override
     public Usuario procurarUsuarioPorEmail(String email) {
         UsuarioEntityJPA usuarioEntityJPA = repository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuário nao encontrado"));
-        UsuarioEntityJPA salvo = repository.save(usuarioEntityJPA);
-        return mapper.toDomain(salvo);
-    }
+        repository.save(usuarioEntityJPA);
 
-    @Transactional
-    @Override
-    public Usuario procurarUsuarioPorId(Long id) {
-        UsuarioEntityJPA usuarioEntityJPA = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário nao encontrado"));
+        usuarioEntityJPA.setId(usuarioEntityJPA.getId());
         return mapper.toDomain(usuarioEntityJPA);
     }
 

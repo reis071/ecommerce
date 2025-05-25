@@ -50,6 +50,13 @@ public class ProdutoEntityJPA {
     @Column(nullable = false)
     private boolean ativo = true;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+    @Column(nullable = false)
+    private LocalDateTime criadoEm = LocalDateTime.now();
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+    private LocalDateTime atualizadoEm;
+
     @JsonIgnore
     @OneToMany(mappedBy = "produto")
     private List<ItemVendaEntityJPA> itensVenda = new ArrayList<>();
@@ -59,13 +66,6 @@ public class ProdutoEntityJPA {
     @JsonIgnore
     private List<ItemCarrinhoEntityJPA> itensCarrinho = new ArrayList<>();
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-    @Column(nullable = false)
-    private LocalDateTime criadoEm;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-    @Column(nullable = false)
-    private LocalDateTime atualizadoEm;
 
     public ProdutoEntityJPA(String nome, String descricao, String categoria, double preco, int estoque) {
         this.nome = nome;

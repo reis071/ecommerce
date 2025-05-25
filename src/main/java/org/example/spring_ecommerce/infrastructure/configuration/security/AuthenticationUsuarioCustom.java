@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+
 @RequiredArgsConstructor
 @Component
 public class AuthenticationUsuarioCustom implements AuthenticationProvider {
@@ -32,6 +34,10 @@ public class AuthenticationUsuarioCustom implements AuthenticationProvider {
         }
     }
 
+    public String autenticar(String email, String senha) {
+         return authenticate(new UsernamePasswordAuthenticationToken(email, senha)).getName();
+
+    }
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);

@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .addFilterAfter(new JwtGeneratorFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtValidatorFilter(), BasicAuthenticationFilter.class);
 
-
+        
         http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomExceptionBasicAuth()));
 
         http.exceptionHandling(ex -> ex.accessDeniedHandler(new CustomAcessDeniedHandler()));

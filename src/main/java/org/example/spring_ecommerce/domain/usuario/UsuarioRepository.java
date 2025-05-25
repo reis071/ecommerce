@@ -9,8 +9,6 @@ public interface UsuarioRepository {
 
     Usuario procurarUsuarioPorEmail(String email);
 
-    Usuario procurarUsuarioPorId(Long id);
-
     List<Usuario> todosOsUsuarios();
 
     void deleteById(Long id);

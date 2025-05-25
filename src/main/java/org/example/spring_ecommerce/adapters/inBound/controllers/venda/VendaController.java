@@ -32,7 +32,6 @@ public class VendaController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteVenda(@PathVariable Long id) {
         try {
             vendaService.deletarVenda(id);

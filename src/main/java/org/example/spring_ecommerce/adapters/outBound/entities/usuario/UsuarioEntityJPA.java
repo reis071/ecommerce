@@ -29,8 +29,7 @@ public class UsuarioEntityJPA {
     @Column(nullable = false)
     private String nome;
 
-    @Column
-    private double saldo = 0;
+
 
     @NotEmpty
     @Column(nullable = false)

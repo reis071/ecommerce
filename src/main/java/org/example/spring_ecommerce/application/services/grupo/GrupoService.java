@@ -39,4 +39,5 @@ public class GrupoService implements GrupoUseCases {
         usuario.getGrupo().add(grupo);
         usuarioUseCases.salvar(usuario);
     }
+
 }

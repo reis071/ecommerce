@@ -26,6 +26,7 @@ public class GrupoImpl implements GrupoRepository {
         return mapper.toDomain(grupoEntityJPA);
     }
 
+    @Transactional
     @Override
     public List<Grupo> findAll() {
         List<GrupoEntityJPA> entities = repository.findAll();

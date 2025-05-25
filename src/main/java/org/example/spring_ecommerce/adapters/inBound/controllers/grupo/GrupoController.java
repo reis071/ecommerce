@@ -21,7 +21,6 @@ public class GrupoController {
     private final GrupoUseCases grupoUseCases;
 
     @PostMapping(path = "/add")
-
     public ResponseEntity<Grupo> cadastrarGrupo(@RequestBody Grupo grupo){
         return ResponseEntity.status(HttpStatus.CREATED).body(grupoUseCases.salvarGrupo(grupo));
     }

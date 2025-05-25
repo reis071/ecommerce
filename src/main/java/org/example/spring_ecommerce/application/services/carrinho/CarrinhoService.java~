@@ -40,7 +40,7 @@ public class CarrinhoService implements CarrinhoUseCases {
         if (!produto.isAtivo()) {
             throw new ProdutoInativo();
         }
-
+        
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 

@@ -27,7 +27,7 @@ public class VendaEntityJPA {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     @Column(nullable = false)
-    private LocalDateTime dataVenda;
+    private LocalDateTime dataVenda = LocalDateTime.now();
 
     @Column(nullable = false)
     private StatusVenda status;
@@ -41,11 +41,9 @@ public class VendaEntityJPA {
 
     public VendaEntityJPA() { }
 
-    public VendaEntityJPA(UsuarioEntityJPA usuarioEntityJPA, LocalDateTime dataVenda, double valorTotal) {
+    public VendaEntityJPA(UsuarioEntityJPA usuarioEntityJPA,  double valorTotal) {
         this.usuario = usuarioEntityJPA;
-        this.dataVenda = dataVenda;
         this.valorTotal = valorTotal;
-        this.status = null;
     }
 
     public Long getId() {

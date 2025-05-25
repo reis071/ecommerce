@@ -28,14 +28,14 @@ public class Produto {
     private int estoque;
 
     private boolean ativo = true;
+    private LocalDateTime criadoEm;
+
+    private LocalDateTime atualizadoEm;
 
     private List<ItemVendaEntityJPA> itensVenda = new ArrayList<>();
 
     private List<ItemCarrinhoEntityJPA> itensCarrinho = new ArrayList<>();
 
-    private LocalDateTime criadoEm;
-
-    private LocalDateTime atualizadoEm;
     public Produto() {}
 
     public Produto(Long id,String nome, String descricao, String categoria, double preco, int estoque) {

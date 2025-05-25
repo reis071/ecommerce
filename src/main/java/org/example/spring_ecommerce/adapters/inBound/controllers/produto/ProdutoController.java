@@ -1,53 +1,43 @@
 package org.example.spring_ecommerce.adapters.inBound.controllers.produto;
 
-import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
-import org.example.spring_ecommerce.application.services.produto.ProdutoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.example.spring_ecommerce.application.useCases.produto.ProdutoUseCases;
+import org.example.spring_ecommerce.domain.produto.Produto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
+    private final ProdutoUseCases produtoUseCases;
 
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProdutoEntityJPA> addProduto(@RequestBody ProdutoEntityJPA produto) {
-        ProdutoEntityJPA novoProduto = produtoService.save(produto);
+    @PostMapping("/registrar-produto")
+    public ResponseEntity<Produto> addProduto(@RequestBody Produto produto) {
+        Produto produtoDomain = produtoUseCases.registrarProduto(produto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoProduto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoDomain);
     }
 
-    @GetMapping("/procurarProduto")
-    public ResponseEntity<ProdutoEntityJPA> getProduto(@RequestParam String nomeProduto) {
-        return ResponseEntity.status(HttpStatus.OK).body(produtoService.procurarProdutoPorNome(nomeProduto));
+    @GetMapping("/procurar-produto")
+    public ResponseEntity<Produto> getProduto(@RequestParam String nomeProduto) {
+        return ResponseEntity.status(HttpStatus.OK).body(produtoUseCases.procurarProdutoPorNome(nomeProduto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<ProdutoEntityJPA>> getAllProdutos() {
+    @GetMapping("/todos-produtos")
+    public ResponseEntity< List<Produto>> todosOsProdutos() {
 
-        return ResponseEntity.status(HttpStatus.OK).body(produtoService.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(produtoUseCases.listarTodosOsProdutos());
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProdutoEntityJPA> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoEntityJPA produtoAtualizado) {
-        ProdutoEntityJPA produtoAtualizadoRetorno = produtoService.atualizarProduto(id, produtoAtualizado);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(produtoAtualizadoRetorno);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deletarProduto")
-    public ResponseEntity<Void> deleteProduto(@RequestParam String nomeProduto) {
-        produtoService.deleteById(nomeProduto);
+    public ResponseEntity<Void> deleteProduto(@RequestParam Long id) {
+        produtoUseCases.removerProduto(id);
         return ResponseEntity.noContent().build();
     }
 
