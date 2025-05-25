@@ -1,0 +1,11 @@
+package org.example.spring_ecommerce.adapters.outBound.mappers;
+
+import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
+import org.example.spring_ecommerce.domain.usuario.Usuario;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface UsuarioJPAMapper {
+    UsuarioEntityJPA toEntity(Usuario usuario);
+    Usuario toDomain(UsuarioEntityJPA entity);
+}

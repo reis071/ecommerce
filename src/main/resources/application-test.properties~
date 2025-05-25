@@ -9,9 +9,14 @@ spring.jpa.hibernate.ddl-auto=update
 spring.h2.console.enabled=true
 spring.h2.console.path=/h2-console
 
+
 spring.jpa.show-sql=true
 
 spring.jpa.properties.hibernate.format_sql=true
+
+security.jwt.expiracao = 200000000
+
+security.jwt.chave = Y29tcGFzc2Vy
 
 spring.mail.host=sandbox.smtp.mailtrap.io
 spring.mail.port=2525
