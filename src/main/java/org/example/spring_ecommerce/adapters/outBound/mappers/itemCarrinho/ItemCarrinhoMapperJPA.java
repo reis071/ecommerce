@@ -8,8 +8,12 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ItemCarrinhoMapperJPA {
-    ItemCarrinho toDomain(ItemCarrinhoEntityJPA itemCarrinhoEntityJPA);
-    ItemCarrinhoEntityJPA toEntity(ItemCarrinho itemCarrinho);
+
+
+    ItemCarrinho toDomain(ItemCarrinhoEntityJPA entity);
+
+
+    ItemCarrinhoEntityJPA toEntity(ItemCarrinho domain);
 
     List<ItemCarrinho> toDomainList(List<ItemCarrinhoEntityJPA> entities);
     List<ItemCarrinhoEntityJPA> toEntityList(List<ItemCarrinho> domain);

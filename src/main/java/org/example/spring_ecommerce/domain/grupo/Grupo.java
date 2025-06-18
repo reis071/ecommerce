@@ -1,6 +1,5 @@
 package org.example.spring_ecommerce.domain.grupo;
 
-
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 
 import java.util.HashSet;
@@ -36,7 +35,6 @@ public class Grupo {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
 
     public Set<Usuario> getUsuarios() {
         return usuarios;

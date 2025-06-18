@@ -1,14 +1,15 @@
 package org.example.spring_ecommerce.adapters.outBound.entities.itemCarrinho;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
-import org.example.spring_ecommerce.adapters.outBound.entities.carrinho.CarrinhoEntityJPA;
+import lombok.NoArgsConstructor;
+
 import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
 
 import java.util.Objects;
 
+@NoArgsConstructor
 @Data
 @Entity
 public class ItemCarrinhoEntityJPA {
@@ -18,25 +19,10 @@ public class ItemCarrinhoEntityJPA {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "carrinho_id")
-    @JsonBackReference
-    private CarrinhoEntityJPA carrinho;
-
-    @ManyToOne
-    @JoinColumn(name = "produto_id")
-
     private ProdutoEntityJPA produto;
 
     @Min(1)
     private int quantidade;
-
-    public ItemCarrinhoEntityJPA() {}
-
-        public ItemCarrinhoEntityJPA(CarrinhoEntityJPA carrinhoEntityJPA, ProdutoEntityJPA produtoEntityJPA, int quantidade) {
-        this.carrinho = carrinhoEntityJPA;
-        this.produto = produtoEntityJPA;
-        this.quantidade = quantidade;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -50,4 +36,5 @@ public class ItemCarrinhoEntityJPA {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

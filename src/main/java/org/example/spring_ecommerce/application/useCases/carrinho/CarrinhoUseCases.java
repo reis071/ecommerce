@@ -7,9 +7,14 @@ public interface CarrinhoUseCases {
 
     Venda compra(String nomeProd, int quantidade);
 
+    Venda finalizarCompra();
+
     Carrinho adicionarAoCarrinho(String nomeProd, int quantidade);
 
-    void removerProdutoDoCarrinhoPorNome(String nomeProduto);
+//    void removerProdutoDoCarrinhoPorNome(String nomeProduto);
 
-    String precoTotalCarrinho();
+//    String precoTotalCarrinho();
+
+
+
 }

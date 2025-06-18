@@ -14,14 +14,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-@Service
+@Component
 public class JwtValidatorFilter extends OncePerRequestFilter {
 
     @Override
@@ -36,14 +37,14 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
 
                 SecretKey chaveSecreta = Keys.hmacShaKeyFor(segredo.getBytes(StandardCharsets.UTF_8));
 
-                Claims claims = Jwts.
-                        parser().verifyWith(chaveSecreta)
+                Claims claims = Jwts
+                        .parser().verifyWith(chaveSecreta)
                         .build()
                         .parseSignedClaims(jwt)
                         .getPayload();
 
-                String email = claims.get("username").toString();
-                String roles = claims.get("roles").toString();
+                String email = claims.get("username", String.class);
+                String roles = claims.get("roles", String.class);
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(email,
                         null,
@@ -57,7 +58,30 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().equals("/usuarios/autenticar") || request.getServletPath().equals("/usuarios/cadastrar-usuario");
+        return request.getServletPath().equals("/usuarios/autenticar-usuario") || request.getServletPath().equals("/usuarios/cadastrar-usuario") ||
+                request.getServletPath().equals("/usuarios/solicitar-nova-senha") || request.getServletPath().equals("/usuarios/resetar-senha");
+    }
+
+    public String validarToken(String token) {
+        try {
+
+        Environment env = getEnvironment();
+
+        String segredo = env.getProperty("JWT_SECRET", "xYzT9#Bv78a%LpZ@5dFgR!kE^mNpQwRs");
+
+        SecretKey chaveSecreta = Keys.hmacShaKeyFor(segredo.getBytes(StandardCharsets.UTF_8));
+
+        Claims claims = Jwts
+                .parser().verifyWith(chaveSecreta)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+            return claims.get("username", String.class);
+        }
+        catch (Exception e) {
+            throw new BadCredentialsException("Token inválido");}
     }
 }

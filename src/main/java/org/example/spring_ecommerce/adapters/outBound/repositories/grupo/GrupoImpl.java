@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.grupo.GrupoEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.mappers.grupo.GrupoMapperJPA;
+import org.example.spring_ecommerce.adapters.outBound.mappers.lembreteDeCiclos.LembreteDeCiclosMapper;
 import org.example.spring_ecommerce.domain.grupo.Grupo;
 import org.example.spring_ecommerce.domain.grupo.GrupoRepository;
 import org.springframework.stereotype.Repository;
@@ -21,9 +22,10 @@ public class GrupoImpl implements GrupoRepository {
     @Transactional
     @Override
     public Grupo salvar(Grupo grupo) {
-        GrupoEntityJPA grupoEntityJPA = new GrupoEntityJPA(grupo.getNome());
+        GrupoEntityJPA grupoEntityJPA = mapper.toEntity(grupo, new LembreteDeCiclosMapper());
         repository.save(grupoEntityJPA);
-        return mapper.toDomain(grupoEntityJPA);
+
+        return mapper.toDomain(grupoEntityJPA, new LembreteDeCiclosMapper());
     }
 
     @Transactional
@@ -36,6 +38,6 @@ public class GrupoImpl implements GrupoRepository {
     @Override
     public Grupo findByNome(String nome) {
         GrupoEntityJPA grupoEntityJPA = repository.findByNome(nome).orElseThrow(() -> new RuntimeException("Grupo nao encontrado"));
-        return mapper.toDomain(grupoEntityJPA);
+        return mapper.toDomain(grupoEntityJPA, new LembreteDeCiclosMapper());
     }
 }

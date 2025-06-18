@@ -17,15 +17,14 @@ import java.util.List;
 @RequestMapping("/grupos")
 public class GrupoController {
 
-
     private final GrupoUseCases grupoUseCases;
 
-    @PostMapping(path = "/add")
+    @PostMapping(path = "/registrar-grupo")
     public ResponseEntity<Grupo> cadastrarGrupo(@RequestBody Grupo grupo){
         return ResponseEntity.status(HttpStatus.CREATED).body(grupoUseCases.salvarGrupo(grupo));
     }
 
-    @GetMapping(path = "/todos")
+    @GetMapping(path = "/listar-grupos")
     public ResponseEntity<List<Grupo>> todosOsGrupos(){
 
         return ResponseEntity.status(HttpStatus.OK).body(grupoUseCases.todosGrupos());
@@ -36,4 +35,5 @@ public class GrupoController {
         grupoUseCases.addGrupoAoUsuario(tipoGrupo, emailUsuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(grupoUseCases.procurarGrupoPorNome(tipoGrupo));
     }
+
 }

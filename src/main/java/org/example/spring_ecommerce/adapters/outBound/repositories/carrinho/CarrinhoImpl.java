@@ -2,13 +2,11 @@ package org.example.spring_ecommerce.adapters.outBound.repositories.carrinho;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
+import org.example.spring_ecommerce.adapters.outBound.entities.carrinho.CarrinhoEntityJPA;
 import org.example.spring_ecommerce.adapters.outBound.mappers.carrino.CarrinhoMapperJPA;
 import org.example.spring_ecommerce.domain.carrinho.Carrinho;
 import org.example.spring_ecommerce.domain.carrinho.CarrinhoRepository;
-import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.springframework.stereotype.Repository;
-
 
 @RequiredArgsConstructor
 @Repository
@@ -19,12 +17,24 @@ public class CarrinhoImpl implements CarrinhoRepository {
 
     @Transactional
     @Override
-    public Carrinho salvar(Usuario usuario) {
+    public Carrinho salvar() {
+        CarrinhoEntityJPA carrinhoEntityJPA = new CarrinhoEntityJPA();
 
-        Carrinho carrinho = new Carrinho(usuario);
-        repository.save(mapper.toEntity(carrinho));
+        repository.save(carrinhoEntityJPA);
 
-        return carrinho;
-
+        carrinhoEntityJPA.setId(carrinhoEntityJPA.getId());
+        return mapper.toDomain(carrinhoEntityJPA);
     }
+
+    @Override
+    public Carrinho atualizarCarrinho(Carrinho carrinho) {
+        CarrinhoEntityJPA carrinhoEntityJPA = mapper.toEntity(carrinho);
+
+        repository.save(carrinhoEntityJPA);
+
+        carrinhoEntityJPA.setId(carrinhoEntityJPA.getId());
+        return mapper.toDomain(carrinhoEntityJPA);
+    }
+
+
 }

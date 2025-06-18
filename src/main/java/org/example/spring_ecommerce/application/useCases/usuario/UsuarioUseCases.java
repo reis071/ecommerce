@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface UsuarioUseCases {
 
+    void resetarSenha(String token, String senhaNova);
+
+    void enviarSolicitacaoDeResetarSenha(String email);
+
     Usuario salvar(Usuario usuario);
 
     Usuario buscarUsuarioPorEmail(String email);

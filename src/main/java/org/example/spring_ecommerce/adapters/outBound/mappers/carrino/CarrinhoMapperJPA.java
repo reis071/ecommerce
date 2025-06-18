@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CarrinhoMapperJPA {
+
     Carrinho toDomain(CarrinhoEntityJPA carrinhoEntityJPA);
+
     CarrinhoEntityJPA toEntity(Carrinho carrinho);
 }

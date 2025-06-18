@@ -3,21 +3,12 @@ package org.example.spring_ecommerce.application.services.vendas;
 import lombok.RequiredArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.repositories.itemVenda.ItemVendaImpl;
 import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoImpl;
-import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
-import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioRepositoryJPA;
-import org.example.spring_ecommerce.adapters.outBound.entities.itemVenda.ItemVendaEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.repositories.itemVenda.ItemVendaRepositoryJPA;
-import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoRepositoryJPA;
 import org.example.spring_ecommerce.adapters.outBound.repositories.venda.VendaImpl;
-import org.example.spring_ecommerce.adapters.outBound.repositories.venda.VendaRepositoryJPA;
 import org.example.spring_ecommerce.application.useCases.venda.VendaUseCases;
 import org.example.spring_ecommerce.domain.itemVenda.ItemVenda;
 import org.example.spring_ecommerce.domain.produto.Produto;
 import org.example.spring_ecommerce.domain.venda.Venda;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -25,7 +16,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service

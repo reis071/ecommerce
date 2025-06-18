@@ -1,11 +1,13 @@
 package org.example.spring_ecommerce.adapters.outBound.entities.itemVenda;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
 
+import java.util.Objects;
+
+@NoArgsConstructor
 @Data
 @Entity
 public class ItemVendaEntityJPA {
@@ -18,40 +20,19 @@ public class ItemVendaEntityJPA {
     @JoinColumn(name = "id_Produto", nullable = false)
     private ProdutoEntityJPA produto;
 
-    @ManyToOne
-    @JoinColumn(name = "venda_id", nullable = false)
-    @JsonBackReference // Adiciona esta anotação
-    private VendaEntityJPA venda;
-
     @Column(nullable = false)
     private Integer quantidade;
 
-
-    public ItemVendaEntityJPA() {}
-
-    public ItemVendaEntityJPA(ProdutoEntityJPA produtoEntityJPA, VendaEntityJPA vendaEntityJPA, Integer quantidade) {
-        this.produto = produtoEntityJPA;
-        this.venda = vendaEntityJPA;
-        this.quantidade = quantidade;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemVendaEntityJPA that = (ItemVendaEntityJPA) o;
+        return Objects.equals(id, that.id);
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
-
-    public ProdutoEntityJPA getProduto() {
-        return produto;
-    }
-
-    public VendaEntityJPA getVenda() {
-        return venda;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-
-
-
 }

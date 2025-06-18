@@ -15,12 +15,12 @@ public class Usuario {
 
     private Carrinho carrinho;
     private List<VendaEntityJPA> vendas = new ArrayList<>();
-    private Set<Grupo> grupo = new HashSet<>();
+
+    private Set<Grupo> grupos = new HashSet<>();
 
     public Usuario() {}
 
     public Usuario(String nome,  String email, String senha) {
-
         this.nome = nome;
         this.senha = senha;
         this.email = email;
@@ -41,7 +41,6 @@ public class Usuario {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
 
     public String getSenha() {
         return senha;
@@ -75,12 +74,12 @@ public class Usuario {
         this.vendas = vendas;
     }
 
-    public Set<Grupo> getGrupo() {
-        return grupo;
+    public Set<Grupo> getGrupos() {
+        return grupos;
     }
 
-    public void setGrupo(Set<Grupo> grupo) {
-        this.grupo = grupo;
+    public void setGrupos(Set<Grupo> grupos) {
+        this.grupos = grupos;
     }
 
     @Override

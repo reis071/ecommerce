@@ -1,8 +1,6 @@
 package org.example.spring_ecommerce.domain.itemCarrinho;
 
-import org.example.spring_ecommerce.domain.carrinho.Carrinho;
 import org.example.spring_ecommerce.domain.produto.Produto;
-
 import java.util.Objects;
 
 
@@ -11,9 +9,6 @@ public class ItemCarrinho {
 
     private Long id;
 
-    private Carrinho carrinho;
-
-
     private Produto produto;
 
 
@@ -21,8 +16,7 @@ public class ItemCarrinho {
 
     public ItemCarrinho() {}
 
-    public ItemCarrinho(Carrinho carrinho, Produto produto, int quantidade) {
-        this.carrinho = carrinho;
+    public ItemCarrinho( Produto produto, int quantidade) {
         this.produto = produto;
         this.quantidade = quantidade;
     }
@@ -33,14 +27,6 @@ public class ItemCarrinho {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Carrinho getCarrinho() {
-        return carrinho;
-    }
-
-    public void setCarrinho(Carrinho carrinho) {
-        this.carrinho = carrinho;
     }
 
     public Produto getProduto() {

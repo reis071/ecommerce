@@ -19,16 +19,14 @@ public class ProdutoImpl implements ProdutoRepository {
     private final ProdutoRepositoryJPA repository;
     private final ProdutoMapperJPA mapper;
 
-    @CacheEvict(value = "produtoCache", allEntries = true)
     @Transactional
     @Override
     public Produto salvar(Produto produto) {
-        ProdutoEntityJPA produtoEntityJPA = new ProdutoEntityJPA(produto.getNome(),
-                                                                produto.getDescricao(),
-                                                                produto.getCategoria(),
-                                                                produto.getPreco(),
-                                                                produto.getEstoque());
+        ProdutoEntityJPA produtoEntityJPA = mapper.toEntity(produto);
+
         repository.save(produtoEntityJPA);
+
+        produtoEntityJPA.setId(produtoEntityJPA.getId());
         return mapper.toDomain(produtoEntityJPA);
     }
 
@@ -37,6 +35,8 @@ public class ProdutoImpl implements ProdutoRepository {
     @Override
     public Produto procurarProdutoPorNome(String nomeProduto) {
         ProdutoEntityJPA produtoEntityJPA = repository.findByNome(nomeProduto).orElseThrow(() -> new RuntimeException("Produto nao encontrado"));
+
+        produtoEntityJPA.setId(produtoEntityJPA.getId());
         return mapper.toDomain(produtoEntityJPA);
     }
 
@@ -59,6 +59,5 @@ public class ProdutoImpl implements ProdutoRepository {
     public void deletarProduto(Long id) {
         repository.deleteById(id);
     }
-
 
 }

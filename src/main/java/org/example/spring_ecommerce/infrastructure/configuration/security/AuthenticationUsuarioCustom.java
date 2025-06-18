@@ -16,6 +16,7 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 @Component
 public class AuthenticationUsuarioCustom implements AuthenticationProvider {
+
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
@@ -34,10 +35,7 @@ public class AuthenticationUsuarioCustom implements AuthenticationProvider {
         }
     }
 
-    public String autenticar(String email, String senha) {
-         return authenticate(new UsernamePasswordAuthenticationToken(email, senha)).getName();
 
-    }
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
