@@ -32,6 +32,7 @@ public class CarrinhoService implements CarrinhoUseCases {
     private final UsuarioImpl usuarioImpl;
     private final ItemCarrinhoImpl itemCarrinhoImpl;
 
+
     public Venda compra(String nomeProd, int quantidade){
 
         Produto produto = produtoImpl.procurarProdutoPorNome(nomeProd);
