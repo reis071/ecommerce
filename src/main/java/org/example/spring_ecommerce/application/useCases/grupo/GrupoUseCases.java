@@ -1,15 +1,16 @@
 package org.example.spring_ecommerce.application.useCases.grupo;
 
 import org.example.spring_ecommerce.domain.grupo.Grupo;
+import org.example.spring_ecommerce.domain.usuario.Usuario;
 
 import java.util.List;
 
 public interface GrupoUseCases {
-    public Grupo salvarGrupo(Grupo grupo);
+    Grupo salvarGrupo(Grupo grupo);
 
-    public List<Grupo> todosGrupos();
+    List<Grupo> todosGrupos();
 
-    public Grupo procurarGrupoPorNome(String nome);
+    Grupo procurarGrupoPorNome(String nome);
 
-    public void addGrupoAoUsuario(String tipoGrupo, String emailUsuario);
+    void addGrupoAoUsuario(String tipoGrupo, String emailUsuario);
 }

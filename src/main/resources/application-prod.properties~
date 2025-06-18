@@ -10,6 +10,12 @@ spring.jpa.show-sql=true
 
 spring.jpa.properties.hibernate.format_sql=true
 
+security.jwt.expiracao = 20
+
+security.jwt.chave = Y29tcGFzc2Vy
+
+
+
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 

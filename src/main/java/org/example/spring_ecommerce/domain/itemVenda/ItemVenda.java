@@ -1,29 +1,24 @@
 package org.example.spring_ecommerce.domain.itemVenda;
-import org.example.spring_ecommerce.adapters.outBound.entities.produto.ProdutoEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.entities.venda.VendaEntityJPA;
+
 import org.example.spring_ecommerce.domain.produto.Produto;
 import org.example.spring_ecommerce.domain.venda.Venda;
 
 import java.util.Objects;
 
-
 public class ItemVenda {
-
 
     private Long id;
 
     private Produto produto;
 
-    private Venda venda;
 
     private Integer quantidade;
 
 
     public ItemVenda() {}
 
-    public ItemVenda( Produto produto, Venda venda, Integer quantidade) {
+    public ItemVenda( Produto produto, Integer quantidade) {
         this.produto = produto;
-        this.venda = venda;
         this.quantidade = quantidade;
     }
 
@@ -41,14 +36,6 @@ public class ItemVenda {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
-    }
-
-    public Venda getVenda() {
-        return venda;
-    }
-
-    public void setVenda(Venda venda) {
-        this.venda = venda;
     }
 
     public Integer getQuantidade() {

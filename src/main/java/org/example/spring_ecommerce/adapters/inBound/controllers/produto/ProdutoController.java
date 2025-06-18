@@ -20,7 +20,6 @@ public class ProdutoController {
     @PostMapping("/registrar-produto")
     public ResponseEntity<Produto> addProduto(@RequestBody Produto produto) {
         Produto produtoDomain = produtoUseCases.registrarProduto(produto);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoDomain);
     }
 
@@ -31,15 +30,18 @@ public class ProdutoController {
 
     @GetMapping("/todos-produtos")
     public ResponseEntity< List<Produto>> todosOsProdutos() {
-
         return ResponseEntity.status(HttpStatus.OK).body(produtoUseCases.listarTodosOsProdutos());
     }
 
-    @DeleteMapping("/deletarProduto")
+    @DeleteMapping("/deletar-produto")
     public ResponseEntity<Void> deleteProduto(@RequestParam Long id) {
         produtoUseCases.removerProduto(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/atualizar-produto")
+    public ResponseEntity<Produto> updateProduto( @RequestBody Produto produto) {
+        return ResponseEntity.status(HttpStatus.OK).body(produtoUseCases.atualizarProduto(produto));
+    }
 }
 

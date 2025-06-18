@@ -2,8 +2,8 @@ package org.example.spring_ecommerce.application.services.grupo;
 
 import lombok.AllArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.repositories.grupo.GrupoImpl;
+import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
 import org.example.spring_ecommerce.application.useCases.grupo.GrupoUseCases;
-import org.example.spring_ecommerce.application.useCases.usuario.UsuarioUseCases;
 import org.example.spring_ecommerce.domain.grupo.Grupo;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
 public class GrupoService implements GrupoUseCases {
 
     private final GrupoImpl grupoImpl;
-    private UsuarioUseCases usuarioUseCases;
+    private UsuarioImpl usuarioImpl;
 
     @Override
     public Grupo salvarGrupo(Grupo grupo) {
@@ -32,12 +32,16 @@ public class GrupoService implements GrupoUseCases {
         return grupoImpl.findByNome(nome);
     }
 
+    @Override
     public void addGrupoAoUsuario(String tipoGrupo, String emailUsuario) {
-        Usuario usuario = usuarioUseCases.buscarUsuarioPorEmail(emailUsuario);
+        Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(emailUsuario);
         Grupo grupo = procurarGrupoPorNome(tipoGrupo);
 
-        usuario.getGrupo().add(grupo);
-        usuarioUseCases.salvar(usuario);
+        usuario.getGrupos().add(grupo);
+        grupo.getUsuarios().add(usuario);
+
+        usuarioImpl.salvar(usuario);
+
     }
 
 }

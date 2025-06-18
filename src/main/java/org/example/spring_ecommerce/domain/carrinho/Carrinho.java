@@ -1,8 +1,7 @@
 package org.example.spring_ecommerce.domain.carrinho;
 
 
-import org.example.spring_ecommerce.domain.usuario.Usuario;
-import org.example.spring_ecommerce.adapters.outBound.entities.itemCarrinho.ItemCarrinhoEntityJPA;
+import org.example.spring_ecommerce.domain.itemCarrinho.ItemCarrinho;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +11,8 @@ public class Carrinho {
 
     private Long id;
 
-    private Usuario usuario;
+    private List<ItemCarrinho> itens = new ArrayList<>();
 
-    private List<ItemCarrinhoEntityJPA> itens = new ArrayList<>();
-
-    public Carrinho() {
-    }
-
-    // Construtor com usuário
-    public Carrinho(Usuario usuario) {
-        this.usuario = usuario;
-    }
 
     public Long getId() {
         return id;
@@ -32,21 +22,15 @@ public class Carrinho {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public List<ItemCarrinhoEntityJPA> getItens() {
+    public List<ItemCarrinho> getItens() {
         return itens;
     }
 
-    public void setItens(List<ItemCarrinhoEntityJPA> itens) {
+    public void setItens(List<ItemCarrinho> itens) {
         this.itens = itens;
     }
+
 
     @Override
     public boolean equals(Object o) {

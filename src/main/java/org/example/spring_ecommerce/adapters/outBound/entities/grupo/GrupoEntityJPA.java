@@ -2,15 +2,12 @@ package org.example.spring_ecommerce.adapters.outBound.entities.grupo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
-import org.example.spring_ecommerce.domain.grupo.Grupo;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -24,13 +21,9 @@ public class GrupoEntityJPA {
     @Column(nullable = false, unique = true)
     private String nome;
 
-    @ManyToMany(mappedBy = "grupo", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "grupos", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<UsuarioEntityJPA> usuarios = new HashSet<>();
-
-    public GrupoEntityJPA( String nome) {
-        this.nome = nome;
-    }
 
     @Override
     public boolean equals(Object o) {

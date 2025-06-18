@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 
@@ -22,23 +23,28 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.
-        csrf(AbstractHttpConfigurer::disable)
-                .securityContext(contextFilter -> contextFilter.requireExplicitSave(false))
-                .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers("/usuarios/resetar-senha-request", "/usuarios/cadastrar-usuario","/usuarios/autenticar").permitAll()
-                        .anyRequest().authenticated())
-                .addFilterAfter(new JwtGeneratorFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new JwtValidatorFilter(), BasicAuthenticationFilter.class);
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .securityContext(context -> context.requireExplicitSave(false))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/usuarios/cadastrar-usuario",
+                                "/usuarios/autenticar-usuario",
+                                "/usuarios/solicitar-nova-senha",
+                                "/usuarios/resetar-senha")
+                        .permitAll()
+                        .requestMatchers("/produtos/deletar-produto", "/produtos/atualizar-produto","produtos/todos-produtos", "/produtos/registrar-produto", "/produtos/procurar-produto",
+                                "vendas/**",
+                                "/grupos/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
 
-
-        http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomExceptionBasicAuth()));
-
-        http.exceptionHandling(ex -> ex.accessDeniedHandler(new CustomAcessDeniedHandler()));
+                .addFilterBefore(new JwtValidatorFilter(), UsernamePasswordAuthenticationFilter.class)
+                .httpBasic(basic -> basic.authenticationEntryPoint(new CustomExceptionBasicAuth()))
+                .exceptionHandling(ex -> ex.accessDeniedHandler(new CustomAcessDeniedHandler()));
 
         return http.build();
     }

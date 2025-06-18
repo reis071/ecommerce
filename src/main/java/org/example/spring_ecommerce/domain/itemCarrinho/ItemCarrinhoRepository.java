@@ -9,11 +9,9 @@ import java.util.Optional;
 
 public interface ItemCarrinhoRepository {
 
-    ItemCarrinho salvar(Carrinho carrinho, Produto produto, int quantidade);
+    ItemCarrinho salvar(ItemCarrinho itemCarrinho);
 
-    List<ItemCarrinho> TodosOsItens(Usuario usuario);
-
-    ItemCarrinho procurarCarrinhoEProduto(Carrinho carrinho, Produto produto);
+//    ItemCarrinho procurarCarrinhoEProduto(Carrinho carrinho, Produto produto);
 
     void removerItemCarrinho(ItemCarrinho itemCarrinho);
 }

@@ -27,8 +27,8 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class VendaService implements VendaUseCases {
 
     private final ProdutoImpl produtoImpl;
@@ -37,11 +37,10 @@ public class VendaService implements VendaUseCases {
 
 
     //retorna todas as vendas
-    @Cacheable("vendaCache")
     public List<Venda> todasAsVendas() {
         return  vendaImpl.todasAsVendas();
     }
-    
+
     //atualiza uma venda
     @CacheEvict(value = "vendaCache", allEntries = true)
     public Venda atualizarVenda(Long id, String produtoNome, Integer quantidade, Long usuarioId) {
@@ -73,7 +72,7 @@ public class VendaService implements VendaUseCases {
     }
 
     //relatorio vendas por data
-    @Cacheable("vendaCache")
+
     public String vendasPorDia(LocalDate date) {
         LocalDateTime dataDeInicio = date.atStartOfDay();
         LocalDateTime dataFinal = dataDeInicio.plusDays(1).minusNanos(1);
@@ -90,7 +89,7 @@ public class VendaService implements VendaUseCases {
     }
 
     //relatorio vendas por mes
-    @Cacheable("vendaCache")
+
     public String vendasPorMes(int year, int month) {
 
         LocalDateTime startOfMonth = LocalDate.of(year, month, 1).atStartOfDay();
@@ -107,7 +106,6 @@ public class VendaService implements VendaUseCases {
     }
 
     // relatorio venda por semana
-    @Cacheable("vendaCache")
     public String vendasPorSemanaAtual() {
         LocalDate now = LocalDate.now();
         LocalDate startOfWeek = now.with(DayOfWeek.MONDAY);

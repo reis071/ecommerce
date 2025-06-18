@@ -3,7 +3,11 @@ package org.example.spring_ecommerce.adapters.outBound.repositories.itemVenda;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.entities.itemVenda.ItemVendaEntityJPA;
+import org.example.spring_ecommerce.adapters.outBound.mappers.carrino.CarrinhoMapperJPA;
 import org.example.spring_ecommerce.adapters.outBound.mappers.itemVenda.ItemVendaMapperJPA;
+import org.example.spring_ecommerce.adapters.outBound.mappers.produto.ProdutoMapperJPA;
+import org.example.spring_ecommerce.adapters.outBound.mappers.usuario.UsuarioMapperJPA;
+import org.example.spring_ecommerce.adapters.outBound.mappers.venda.VendaMapperJPA;
 import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoRepositoryJPA;
 import org.example.spring_ecommerce.domain.itemVenda.ItemVenda;
 import org.example.spring_ecommerce.domain.itemVenda.ItemVendaRepository;
@@ -13,16 +17,19 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 public class ItemVendaImpl implements ItemVendaRepository {
+
     private final ItemVendaMapperJPA mapper;
-    private final ItemVendaRepositoryJPA itemVendaRepositoryJPA;
+    private final ItemVendaRepositoryJPA repository;
 
     @Transactional
     @Override
     public ItemVenda salvar(ItemVenda itemVenda) {
 
-        ItemVenda domain = new ItemVenda(itemVenda.getProduto(), itemVenda.getVenda(), itemVenda.getQuantidade());
+        ItemVendaEntityJPA entity = mapper.toEntity(itemVenda);
 
-        ItemVendaEntityJPA entity = itemVendaRepositoryJPA.save(mapper.toEntity(domain));
+        repository.save(entity);
+
+        entity.setId(entity.getId());
 
         return mapper.toDomain(entity);
     }

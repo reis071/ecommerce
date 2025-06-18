@@ -25,7 +25,7 @@ public class ApiAplicationUserDetailsService implements UserDetailsService {
         Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(username);
 
         List<GrantedAuthority> permissoes = usuario
-                .getGrupo()
+                .getGrupos()
                 .stream()
                 .map( permissaoConfig -> new SimpleGrantedAuthority(permissaoConfig.getNome()))
                 .collect(Collectors.toList());

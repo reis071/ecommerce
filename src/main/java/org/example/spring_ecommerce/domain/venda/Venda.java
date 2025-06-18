@@ -33,9 +33,9 @@ public class Venda {
 
     public Venda() { }
 
-    public Venda(Usuario usuario, LocalDateTime dataVenda, double valorTotal) {
+    public Venda(Usuario usuario, double valorTotal) {
         this.usuario = usuario;
-        this.dataVenda = dataVenda;
+
         this.valorTotal = valorTotal;
         this.status = null;
     }
