@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
+
         // Trata exceções do tipo NullPointerException, retornando um erro 500 (Internal Server Error)
         @ExceptionHandler(NullPointerException.class)
         @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler {
             ErrorResponse errorResponse = new ErrorResponse("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
 
         // Trata exceções de validação de argumentos de método, retornando um erro 400 (Bad Request)
         // Coleta todos os erros de validação e os inclui na resposta
@@ -46,6 +48,7 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
+
         // Trata exceções de entidade não encontrada, retornando um erro 404 (Not Found)
         // Usado quando uma entidade do banco de dados não é localizada
         @ExceptionHandler(EntityNotFoundException.class)
@@ -54,6 +57,7 @@ public class GlobalExceptionHandler {
             ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
+
 
         // Trata exceções de acesso negado, retornando um erro 403 (Forbidden)
         // Usado quando um usuário tenta acessar um recurso sem a permissão adequada
@@ -64,6 +68,7 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
+
         // Trata exceções de método HTTP não suportado, retornando um erro 405 (Method Not Allowed)
         // Usado quando o método HTTP (GET, POST, etc.) não é permitido no endpoint
         @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -72,6 +77,7 @@ public class GlobalExceptionHandler {
             ErrorResponse errorResponse = new ErrorResponse("Method not allowed", HttpStatus.METHOD_NOT_ALLOWED.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
         }
+
 
         // Trata exceções de violações de restrição de validação (por exemplo, @NotNull), retornando erro 400 (Bad Request)
         // Usado para capturar falhas em validações de campos
@@ -89,5 +95,6 @@ public class GlobalExceptionHandler {
             ErrorResponse errorResponse = new ErrorResponse("Data integrity violation", HttpStatus.CONFLICT.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
         }
+
 
     }

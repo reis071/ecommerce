@@ -1,7 +1,7 @@
 package org.example.spring_ecommerce.application.services.email;
 
 import lombok.RequiredArgsConstructor;
-import org.example.spring_ecommerce.adapters.inBound.dtos.EmailDto;
+import org.example.spring_ecommerce.adapters.inBound.dtos.email.EmailDto;
 
 import org.springframework.mail.SimpleMailMessage;
 

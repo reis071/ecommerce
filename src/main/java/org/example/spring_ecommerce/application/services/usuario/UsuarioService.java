@@ -1,7 +1,7 @@
 package org.example.spring_ecommerce.application.services.usuario;
 
 import lombok.AllArgsConstructor;
-import org.example.spring_ecommerce.adapters.inBound.dtos.EmailDto;
+import org.example.spring_ecommerce.adapters.inBound.dtos.email.EmailDto;
 import org.example.spring_ecommerce.adapters.outBound.repositories.carrinho.CarrinhoImpl;
 import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
 import org.example.spring_ecommerce.application.services.email.EmailService;

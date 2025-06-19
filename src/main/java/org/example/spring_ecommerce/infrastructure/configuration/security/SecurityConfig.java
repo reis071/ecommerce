@@ -34,7 +34,11 @@ public class SecurityConfig {
                                 "/usuarios/cadastrar-usuario",
                                 "/usuarios/autenticar-usuario",
                                 "/usuarios/solicitar-nova-senha",
-                                "/usuarios/resetar-senha")
+                                "/usuarios/resetar-senha","/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml",
+                                "/webjars/**")
                         .permitAll()
                         .requestMatchers("/produtos/deletar-produto", "/produtos/atualizar-produto","produtos/todos-produtos", "/produtos/registrar-produto", "/produtos/procurar-produto",
                                 "vendas/**",
@@ -53,8 +57,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
-
 
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
