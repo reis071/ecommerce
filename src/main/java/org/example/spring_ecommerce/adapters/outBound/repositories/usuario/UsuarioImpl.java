@@ -7,6 +7,7 @@ import org.example.spring_ecommerce.adapters.outBound.mappers.lembreteDeCiclos.L
 import org.example.spring_ecommerce.adapters.outBound.mappers.usuario.UsuarioMapperJPA;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.example.spring_ecommerce.domain.usuario.UsuarioRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

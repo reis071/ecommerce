@@ -51,10 +51,8 @@ public class ProdutoController {
     }
 
     @Operation(summary = "Deleta um produto pelo id", description = "Endpoint para deletar um produto pelo id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Produto deletado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Produto nao encontrado")
-    })
+    @ApiResponse(responseCode = "204", description = "Produto deletado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Produto nao encontrado")
     @DeleteMapping("/deletar-produto")
     public ResponseEntity<Void> deleteProduto(@RequestParam Long id) {
         produtoUseCases.removerProduto(id);

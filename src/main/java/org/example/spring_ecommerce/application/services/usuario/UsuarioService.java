@@ -9,6 +9,8 @@ import org.example.spring_ecommerce.application.useCases.usuario.UsuarioUseCases
 
 import org.example.spring_ecommerce.domain.carrinho.Carrinho;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
+import org.example.spring_ecommerce.infrastructure.configuration.advices.exception.handler.GlobalExceptionHandler;
+import org.example.spring_ecommerce.infrastructure.configuration.advices.exception.usuario.UsuarioException;
 import org.example.spring_ecommerce.infrastructure.configuration.security.jwt.JwtGeneratorFilter;
 import org.example.spring_ecommerce.infrastructure.configuration.security.jwt.JwtValidatorFilter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioService implements  UsuarioUseCases {
 
-
+    private final GlobalExceptionHandler globalExceptionHandler;
     private final CarrinhoImpl carrinhoImpl;
     private final UsuarioImpl usuarioImpl;
     private final PasswordEncoder passwordEncoder;
@@ -29,6 +31,15 @@ public class UsuarioService implements  UsuarioUseCases {
 
     @Override
     public Usuario salvar(Usuario usuario){
+        if(usuario.getEmail().isEmpty()){
+            throw new UsuarioException("O e-mail do usuário deve ser preenchido.");
+        }
+        else if(usuario.getSenha().isEmpty()){
+            throw new UsuarioException("A senha do usuário deve ser preenchida.");
+        }
+        else if (usuario.getNome().isEmpty()) {
+            throw new UsuarioException("O nome do usuário deve ser preenchido.");
+        }
 
         Carrinho carrinho = carrinhoImpl.salvar();
 
@@ -44,7 +55,11 @@ public class UsuarioService implements  UsuarioUseCases {
 
     @Override
     public Usuario buscarUsuarioPorEmail(String email) {
-        return usuarioImpl.procurarUsuarioPorEmail(email);
+        try {
+            return usuarioImpl.procurarUsuarioPorEmail(email);
+        } catch (Exception e) {
+            throw new UsuarioException("Usuário nao encontrado");
+        }
     }
 
 

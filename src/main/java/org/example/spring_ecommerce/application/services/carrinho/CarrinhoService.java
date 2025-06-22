@@ -3,6 +3,7 @@ package org.example.spring_ecommerce.application.services.carrinho;
 import lombok.RequiredArgsConstructor;
 
 import org.example.spring_ecommerce.adapters.outBound.repositories.carrinho.CarrinhoImpl;
+import org.example.spring_ecommerce.infrastructure.configuration.advices.exception.produto.ProdutoException;
 import org.springframework.stereotype.Service;
 import org.example.spring_ecommerce.adapters.outBound.repositories.itemCarrinho.ItemCarrinhoImpl;
 import org.example.spring_ecommerce.adapters.outBound.repositories.itemVenda.ItemVendaImpl;
@@ -15,7 +16,7 @@ import org.example.spring_ecommerce.domain.itemCarrinho.ItemCarrinho;
 import org.example.spring_ecommerce.domain.itemVenda.ItemVenda;
 import org.example.spring_ecommerce.domain.produto.Produto;
 import org.example.spring_ecommerce.domain.venda.Venda;
-import org.example.spring_ecommerce.infrastructure.configuration.advices.exceptionExclusives.ProdutoInativo;
+
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +39,7 @@ public class CarrinhoService implements CarrinhoUseCases {
         Produto produto = produtoImpl.procurarProdutoPorNome(nomeProd);
 
         if (!produto.isAtivo()) {
-            throw new ProdutoInativo();
+            throw new ProdutoException("Produto inativo");
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,7 +67,7 @@ public class CarrinhoService implements CarrinhoUseCases {
         Produto produto = produtoImpl.procurarProdutoPorNome(nomeProd);
 
         if (!produto.isAtivo()) {
-            throw new ProdutoInativo();
+            throw new ProdutoException("Produto inativo");
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

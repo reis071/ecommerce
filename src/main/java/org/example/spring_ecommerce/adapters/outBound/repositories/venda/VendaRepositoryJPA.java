@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
+
 public interface VendaRepositoryJPA extends JpaRepository<VendaEntityJPA, Long> {
     List<VendaEntityJPA> findByDataVendaBetween(LocalDateTime start, LocalDateTime end);
 
