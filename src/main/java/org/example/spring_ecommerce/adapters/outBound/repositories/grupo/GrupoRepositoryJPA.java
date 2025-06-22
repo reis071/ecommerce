@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+
 public interface GrupoRepositoryJPA extends JpaRepository<GrupoEntityJPA, Long> {
     Optional<GrupoEntityJPA> findByNome(String nome);
 
