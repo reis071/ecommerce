@@ -1,8 +1,7 @@
 package org.example.spring_ecommerce.application.useCases.usuario;
 
+import org.example.spring_ecommerce.application.dtos.usuario.UsuarioDTORequest;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
-
-import java.util.List;
 
 public interface UsuarioUseCases {
 
@@ -10,7 +9,7 @@ public interface UsuarioUseCases {
 
     void enviarSolicitacaoDeResetarSenha(String email);
 
-    Usuario salvar(Usuario usuario);
+    Usuario salvar(UsuarioDTORequest usuarioDTORequest);
 
     Usuario buscarUsuarioPorEmail(String email);
 }

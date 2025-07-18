@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.spring_ecommerce.adapters.inBound.dtos.email.EmailDto;
 import org.example.spring_ecommerce.adapters.outBound.repositories.carrinho.CarrinhoImpl;
 import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
+import org.example.spring_ecommerce.application.dtos.usuario.UsuarioDTORequest;
 import org.example.spring_ecommerce.application.services.email.EmailService;
 import org.example.spring_ecommerce.application.useCases.usuario.UsuarioUseCases;
 
@@ -30,21 +31,26 @@ public class UsuarioService implements  UsuarioUseCases {
     private final JwtValidatorFilter jwtValidatorFilter;
 
     @Override
-    public Usuario salvar(Usuario usuario){
-        if(usuario.getEmail().isEmpty()){
+    public Usuario salvar(UsuarioDTORequest usuarioDTO) {
+        if(usuarioDTO.email().isEmpty()){
             throw new UsuarioException("O e-mail do usuário deve ser preenchido.");
         }
-        else if(usuario.getSenha().isEmpty()){
+        else if(usuarioDTO.senha().isEmpty()){
             throw new UsuarioException("A senha do usuário deve ser preenchida.");
         }
-        else if (usuario.getNome().isEmpty()) {
+        else if (usuarioDTO.nome().isEmpty()) {
             throw new UsuarioException("O nome do usuário deve ser preenchido.");
         }
 
         Carrinho carrinho = carrinhoImpl.salvar();
 
-        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
-        usuario.setSenha(senhaCriptografada);
+        String senhaCriptografada = passwordEncoder.encode(usuarioDTO.senha());
+
+        Usuario usuario = new Usuario(
+                usuarioDTO.email(),
+                senhaCriptografada,
+                usuarioDTO.nome()
+        );
 
         usuario.setCarrinho(carrinho);
 
