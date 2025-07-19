@@ -11,18 +11,26 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - ecommerce-net
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   app:
     build: .
     container_name: ecommerce-app
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: prod
     networks:
       - ecommerce-net
+
 
 volumes:
   mysql_data:
