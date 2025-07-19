@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.example.spring_ecommerce.adapters.inBound.dtos.produto.ProdutoDTOResponse;
+import org.example.spring_ecommerce.application.dtos.produto.ProdutoDTORequest;
+import org.example.spring_ecommerce.application.dtos.produto.ProdutoDTORequestComId;
 import org.example.spring_ecommerce.application.useCases.produto.ProdutoUseCases;
 import org.example.spring_ecommerce.domain.produto.Produto;
 import org.springframework.http.HttpStatus;
@@ -28,9 +30,14 @@ public class ProdutoController {
     @ApiResponse( responseCode = "201", description = "Produto registrado com sucesso",
     content = @Content(schema = @Schema(implementation = Produto.class)))
     @PostMapping("/registrar-produto")
-    public ResponseEntity<Produto> addProduto(@RequestBody Produto produto) {
-        Produto produtoDomain = produtoUseCases.registrarProduto(produto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoDomain);
+    public ResponseEntity<ProdutoDTOResponse> addProduto(@RequestBody ProdutoDTORequest request) {
+        Produto produtoDomain = produtoUseCases.registrarProduto(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ProdutoDTOResponse(produtoDomain.getNome(),
+                produtoDomain.getDescricao(),
+                produtoDomain.getCategoria(),
+                produtoDomain.getPreco(),
+                produtoDomain.getEstoque()
+        ));
     }
 
     @Operation(summary = "Procura um produto pelo nome", description = "Endpoint para procurar um produto pelo nome")
@@ -63,8 +70,8 @@ public class ProdutoController {
     @ApiResponse( responseCode = "200", description = "Produto atualizado com sucesso",
             content = @Content(schema = @Schema(implementation = Produto.class)))
     @PatchMapping("/atualizar-produto")
-    public ResponseEntity<Produto> updateProduto( @RequestBody Produto produto) {
-        return ResponseEntity.status(HttpStatus.OK).body(produtoUseCases.atualizarProduto(produto));
+    public ResponseEntity<Produto> updateProduto( @RequestBody ProdutoDTORequestComId request) {
+        return ResponseEntity.status(HttpStatus.OK).body(produtoUseCases.atualizarProduto(request));
     }
 }
 

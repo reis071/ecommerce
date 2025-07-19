@@ -3,6 +3,7 @@ package org.example.spring_ecommerce.application.services.carrinho;
 import lombok.RequiredArgsConstructor;
 
 import org.example.spring_ecommerce.adapters.outBound.repositories.carrinho.CarrinhoImpl;
+import org.example.spring_ecommerce.application.dtos.carrinho.CarrinhoDTORequest;
 import org.example.spring_ecommerce.infrastructure.configuration.advices.exception.produto.ProdutoException;
 import org.springframework.stereotype.Service;
 import org.example.spring_ecommerce.adapters.outBound.repositories.itemCarrinho.ItemCarrinhoImpl;
@@ -34,9 +35,10 @@ public class CarrinhoService implements CarrinhoUseCases {
     private final ItemCarrinhoImpl itemCarrinhoImpl;
 
 
-    public Venda compra(String nomeProd, int quantidade){
+    @Override
+    public Venda compra(CarrinhoDTORequest carrinhoDTO) {
 
-        Produto produto = produtoImpl.procurarProdutoPorNome(nomeProd);
+        Produto produto = produtoImpl.procurarProdutoPorNome(carrinhoDTO.nomeProd());
 
         if (!produto.isAtivo()) {
             throw new ProdutoException("Produto inativo");
@@ -47,11 +49,11 @@ public class CarrinhoService implements CarrinhoUseCases {
 
         Usuario usuario = usuarioImpl.procurarUsuarioPorEmail(email);
 
-        Venda venda = vendaImpl.salva(new Venda(usuario, quantidade * produto.getPreco()));
+        Venda venda = vendaImpl.salva(new Venda(usuario, carrinhoDTO.quantidade() * produto.getPreco()));
 
-        produto.setEstoque(produto.getEstoque() - quantidade);
+        produto.setEstoque(produto.getEstoque() - carrinhoDTO.quantidade());
 
-        ItemVenda itemVenda = new ItemVenda(produto, quantidade);
+        ItemVenda itemVenda = new ItemVenda(produto, carrinhoDTO.quantidade());
         venda.getItensVenda().add(itemVenda);
 
         produtoImpl.salvar(produto);
@@ -62,9 +64,10 @@ public class CarrinhoService implements CarrinhoUseCases {
         return venda;
     }
 
+    @Override
     // Método para adicionar um item ao carrinho
-    public Carrinho adicionarAoCarrinho(String nomeProd, int quantidade) {
-        Produto produto = produtoImpl.procurarProdutoPorNome(nomeProd);
+    public Carrinho adicionarAoCarrinho(CarrinhoDTORequest carrinhoDTO) {
+        Produto produto = produtoImpl.procurarProdutoPorNome(carrinhoDTO.nomeProd());
 
         if (!produto.isAtivo()) {
             throw new ProdutoException("Produto inativo");
@@ -78,7 +81,7 @@ public class CarrinhoService implements CarrinhoUseCases {
 
         Carrinho carrinho = usuario.getCarrinho();
 
-        ItemCarrinho itemCarrinho = itemCarrinhoImpl.salvar(new ItemCarrinho(produto, quantidade));
+        ItemCarrinho itemCarrinho = itemCarrinhoImpl.salvar(new ItemCarrinho(produto, carrinhoDTO.quantidade()));
 
         carrinho.getItens().add(itemCarrinho);
 

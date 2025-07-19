@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.example.spring_ecommerce.application.dtos.carrinho.CarrinhoDTORequest;
 import org.example.spring_ecommerce.application.useCases.carrinho.CarrinhoUseCases;
 import org.example.spring_ecommerce.domain.carrinho.Carrinho;
 import org.example.spring_ecommerce.domain.venda.Venda;
@@ -28,8 +29,8 @@ public class CompraController {
             @ApiResponse( responseCode = "404", description = "Produto nao encontrado")
     })
     @PostMapping("comprar-direto")
-    public ResponseEntity<Venda> comprarProduto(@RequestParam String nomeProd, @RequestParam int quantidade) {
-        Venda venda = carrinhoUseCases.compra(nomeProd, quantidade);
+    public ResponseEntity<Venda> comprarProduto(@RequestBody CarrinhoDTORequest request) {
+        Venda venda = carrinhoUseCases.compra(request);
         return ResponseEntity.ok(venda);
     }
 
@@ -40,8 +41,8 @@ public class CompraController {
     })
     // Endpoint para adicionar produto ao carrinho
     @PostMapping("adicionar-carrinho")
-    public ResponseEntity<Carrinho> adicionarAoCarrinho(@RequestParam String nomeProd, @RequestParam int quantidade) {
-        Carrinho carrinho = carrinhoUseCases.adicionarAoCarrinho(nomeProd, quantidade);
+    public ResponseEntity<Carrinho> adicionarAoCarrinho(CarrinhoDTORequest request) {
+        Carrinho carrinho = carrinhoUseCases.adicionarAoCarrinho(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(carrinho);
     }
 
