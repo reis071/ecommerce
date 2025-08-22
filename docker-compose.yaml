@@ -30,8 +30,6 @@ services:
       SPRING_PROFILES_ACTIVE: prod
     networks:
       - ecommerce-net
-
-
 volumes:
   mysql_data:
 
