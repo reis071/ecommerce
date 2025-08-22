@@ -1,11 +1,13 @@
 package org.example.spring_ecommerce.application.useCases.produto;
 
+import org.example.spring_ecommerce.application.dtos.produto.ProdutoDTORequest;
+import org.example.spring_ecommerce.application.dtos.produto.ProdutoDTORequestComId;
 import org.example.spring_ecommerce.domain.produto.Produto;
 
 import java.util.List;
 
 public interface ProdutoUseCases {
-    Produto registrarProduto(Produto produto);
+    Produto registrarProduto(ProdutoDTORequest produtoDTO);
 
     Produto procurarProdutoPorNome(String nomeProduto);
 
@@ -13,6 +15,6 @@ public interface ProdutoUseCases {
 
     List<Produto> listarTodosOsProdutos();
 
-    Produto atualizarProduto(Produto produtoAtualizado);
+    Produto atualizarProduto(ProdutoDTORequestComId produtoDTORequestComId);
 
 }

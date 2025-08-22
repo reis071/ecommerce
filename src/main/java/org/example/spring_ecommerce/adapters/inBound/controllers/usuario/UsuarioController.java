@@ -7,7 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-import org.example.spring_ecommerce.adapters.inBound.dtos.usuario.UsuarioDto;
+import org.example.spring_ecommerce.adapters.inBound.dtos.usuario.UsuarioDTOResponse;
+import org.example.spring_ecommerce.application.dtos.usuario.UsuarioDTORequest;
 import org.example.spring_ecommerce.application.useCases.usuario.UsuarioUseCases;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 
@@ -37,10 +38,10 @@ public class UsuarioController {
     @ApiResponse( responseCode = "201", description = "Usuario cadastrado com sucesso",
             content = @Content(schema = @Schema(implementation = Usuario.class)))
     @PostMapping(path = "/cadastrar-usuario")
-    public ResponseEntity<UsuarioDto> cadastrarUsuario(@RequestBody Usuario usuario) {
-        Usuario domain = usuarioUseCases.salvar(usuario);
+    public ResponseEntity<UsuarioDTOResponse> cadastrarUsuario(@RequestBody UsuarioDTORequest request) {
+        Usuario domain = usuarioUseCases.salvar(request);
 
-        return ResponseEntity.ok(new UsuarioDto(domain.getNome(), domain.getEmail()));
+        return ResponseEntity.ok(new UsuarioDTOResponse(domain.getNome(), domain.getEmail()));
     }
 
     @Operation(summary = "Autenticar um usuario", description = "Endpoint para autenticar um usuario")

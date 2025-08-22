@@ -3,6 +3,7 @@ package org.example.spring_ecommerce.application.services.grupo;
 import lombok.AllArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.repositories.grupo.GrupoImpl;
 import org.example.spring_ecommerce.adapters.outBound.repositories.usuario.UsuarioImpl;
+import org.example.spring_ecommerce.application.dtos.grupo.GrupoDTORequest;
 import org.example.spring_ecommerce.application.useCases.grupo.GrupoUseCases;
 import org.example.spring_ecommerce.domain.grupo.Grupo;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
@@ -20,10 +21,12 @@ public class GrupoService implements GrupoUseCases {
     private UsuarioImpl usuarioImpl;
 
     @Override
-    public Grupo salvarGrupo(Grupo grupo) {
-        if (grupo.getNome().isEmpty()) {
+    public Grupo salvarGrupo(GrupoDTORequest grupoDTORequest) {
+        if (grupoDTORequest.nome().isEmpty()) {
             throw new GrupoException("O nome do grupo nao pode ser vazio");
         }
+        Grupo grupo = new Grupo(grupoDTORequest.nome());
+
         return grupoImpl.salvar(grupo);
     }
 
