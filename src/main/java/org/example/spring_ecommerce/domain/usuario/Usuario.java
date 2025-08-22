@@ -22,8 +22,8 @@ public class Usuario {
 
     public Usuario(String nome,  String email, String senha) {
         this.nome = nome;
-        this.senha = senha;
         this.email = email;
+        this.senha = senha;
     }
 
     public Long getId() {

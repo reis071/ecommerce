@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.example.spring_ecommerce.adapters.inBound.dtos.grupo.GrupoDTOResponse;
+import org.example.spring_ecommerce.application.dtos.grupo.GrupoDTORequest;
 import org.example.spring_ecommerce.application.useCases.grupo.GrupoUseCases;
 import org.example.spring_ecommerce.domain.grupo.Grupo;
 import org.example.spring_ecommerce.application.services.grupo.GrupoService;
@@ -29,8 +31,9 @@ public class GrupoController {
     @ApiResponse( responseCode = "201", description = "Grupo registrado com sucesso",
             content = @Content(schema = @Schema(implementation = Grupo.class)))
     @PostMapping(path = "/registrar-grupo")
-    public ResponseEntity<Grupo> cadastrarGrupo(@RequestBody Grupo grupo){
-        return ResponseEntity.status(HttpStatus.CREATED).body(grupoUseCases.salvarGrupo(grupo));
+    public ResponseEntity<GrupoDTOResponse> cadastrarGrupo(@RequestBody GrupoDTORequest request){
+        Grupo grupoDomain = grupoUseCases.salvarGrupo(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new GrupoDTOResponse(grupoDomain.getNome()));
     }
 
     @Operation(summary = "Retorna todos os grupos", description = "Endpoint para retornar todos os grupos")

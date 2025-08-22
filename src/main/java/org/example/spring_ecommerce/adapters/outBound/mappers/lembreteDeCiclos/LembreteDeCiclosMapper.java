@@ -3,10 +3,12 @@ package org.example.spring_ecommerce.adapters.outBound.mappers.lembreteDeCiclos;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.TargetType;
+import org.springframework.stereotype.Component;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+@Component
 public class LembreteDeCiclosMapper {
     private final Map<Object, Object> knownInstances = new IdentityHashMap<>();
 

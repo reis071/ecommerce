@@ -1,12 +1,11 @@
 package org.example.spring_ecommerce.adapters.outBound.mappers.usuario;
 
 import org.example.spring_ecommerce.adapters.outBound.entities.usuario.UsuarioEntityJPA;
-import org.example.spring_ecommerce.adapters.outBound.mappers.grupo.GrupoMapperJPA;
 import org.example.spring_ecommerce.adapters.outBound.mappers.lembreteDeCiclos.LembreteDeCiclosMapper;
 import org.example.spring_ecommerce.domain.usuario.Usuario;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+
 
 
 import java.util.List;
