@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.spring_ecommerce.adapters.outBound.repositories.produto.ProdutoImpl;
 import org.example.spring_ecommerce.application.useCases.produto.ProdutoUseCases;
 import org.example.spring_ecommerce.domain.produto.Produto;
+import org.example.spring_ecommerce.infrastructure.configuration.advices.exception.produto.ProdutoException;
 import org.springframework.stereotype.Service;
 
 
@@ -20,15 +21,24 @@ public class ProdutoService implements ProdutoUseCases {
     }
 
     public Produto procurarProdutoPorNome(String nomeProduto) {
-        return produtoImpl.procurarProdutoPorNome(nomeProduto);
+        try {
+            return produtoImpl.procurarProdutoPorNome(nomeProduto);
+        }
+        catch (ProdutoException e) {
+            throw new ProdutoException("Produto nao encontrado");
+        }
     }
 
     public List<Produto> listarTodosOsProdutos() {
-        return produtoImpl.todosOsProdutos();
+            return produtoImpl.todosOsProdutos();
     }
 
     public void removerProduto(Long id) {
-        produtoImpl.deletarProduto(id);
+        try {
+            produtoImpl.deletarProduto(id);
+        }catch (Exception e) {
+            throw new ProdutoException("Produto nao encontrado");
+        }
     }
 
     public Produto atualizarProduto(Produto produtoAtualizado) {
